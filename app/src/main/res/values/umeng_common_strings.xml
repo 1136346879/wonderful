@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="umeng_common_action_info_exist" translatable="false">The app is already in downloading list.</string>
+    <string name="umeng_common_info_interrupt" translatable="false">dowload interrupted.</string>
+    <string name="umeng_common_action_pause" translatable="false">Pause</string>
+    <string name="umeng_common_action_continue" translatable="false">Continue</string>
+    <string name="umeng_common_action_cancel" translatable="false">Cancel</string>
+	<string name="umeng_common_download_notification_prefix" translatable="false">Downloading: </string>
+	<string name="umeng_common_pause_notification_prefix" translatable="false">Pause: </string>
+	<string name="umeng_common_start_download_notification" translatable="false">Download start.</string>
+	<string name="umeng_common_start_patch_notification" translatable="false">Patch start.</string>
+	<string name="umeng_common_network_break_alert" translatable="false">Please make sure you are connected to internet, download failed</string>
+	<string name="umeng_common_download_failed" translatable="false">Download Failed! </string>
+	<string name="umeng_common_download_finish" translatable="false">Download finished,click to install it.</string>
+	<string name="umeng_common_patch_finish" translatable="false">Patch finished,click to install it.</string>
+	<string name="umeng_common_silent_download_finish" translatable="false">New version is ready,click to install it.</string>
+	<string name="umeng_common_icon" translatable="false">icon</string>
+</resources>
