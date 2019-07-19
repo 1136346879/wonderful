@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import cn.bmob.v3.listener.UploadFileListener;
 
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.Action;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xgr.wonderful.R;
 import com.xgr.wonderful.entity.QiangYu;
 import com.xgr.wonderful.entity.User;
@@ -39,6 +41,7 @@ import com.xgr.wonderful.ui.base.BasePageActivity;
 import com.xgr.wonderful.utils.ActivityUtil;
 import com.xgr.wonderful.utils.CacheUtils;
 import com.xgr.wonderful.utils.LogUtils;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author kingofglory email: kingofglory@yeah.net blog: http:www.google.com
@@ -113,11 +116,11 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
 					ActivityUtil.show(mContext, "内容不能为空");
 					return;
 				}
-				if (targeturl == null) {
+//				if (targeturl == null) {
 					publishWithoutFigure(commitContent, null);
-				} else {
-					publish(commitContent);
-				}
+//				} else {
+//					publish(commitContent);
+//				}
 			}
 
 			@Override
@@ -165,10 +168,23 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
 		case R.id.open_layout:
 			Date date1 = new Date(System.currentTimeMillis());
 			dateTime = date1.getTime() + "";
-			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-			intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI,
-					"image/*");
-			startActivityForResult(intent, REQUEST_CODE_ALBUM);
+			RxPermissions rxPermissions = new RxPermissions(this);
+			rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+					.subscribe(new Consumer<Boolean>() {
+						@Override
+						public void accept(Boolean aBoolean) throws Exception {
+						if(aBoolean){
+								Intent intent =new  Intent(Intent.ACTION_PICK, null);
+								// 如果要限制上传到服务器的图片类型时可以直接写如：image/jpeg 、 image/png等的类型
+								intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+								startActivityForResult(intent,REQUEST_CODE_ALBUM);
+							}
+						}
+					});
+//			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//			intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI,
+//					"image/*");
+//			startActivityForResult(intent, REQUEST_CODE_ALBUM);
 			break;
 		case R.id.take_layout:
 			Date date = new Date(System.currentTimeMillis());

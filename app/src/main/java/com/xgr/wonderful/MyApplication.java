@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.graphics.Bitmap;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
