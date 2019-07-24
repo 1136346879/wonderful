@@ -1,0 +1,44 @@
+
+Vsquid:S1135›"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ8ÃøºÄÁ-
+Bsquid:S00108Ï")Either remove or fill this block of code.(å¥ž‡
+Osquid:S1135“"2Complete the task associated to this TODO comment.(àøö×ûÿÿÿÿ
+^
+squid:S899»"BDo something with the "boolean" value returned by "createNewFile".(ôü¿Ÿÿÿÿÿÿ
+Nsquid:S1135^"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+osquid:CommentedOutCodeLineÛ"<This block of commented-out lines of code should be removed.(ñ¥ùšøÿÿÿÿ8Ž·É¼Á-
+Vsquid:S1135Ç"2Complete the task associated to this TODO comment.(ÕÌ®þÿÿÿÿ8Ã´ÏÂ-
+osquid:CommentedOutCodeLineœ"<This block of commented-out lines of code should be removed.(¬æàØüÿÿÿÿ8ó†¡ÄÁ-
+fsquid:S4042¸"IUse "java.nio.Files#delete" here for better messages on error conditions.(é‘‚©úÿÿÿÿ
+Osquid:S1135Â"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Osquid:S1135¶"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Osquid:S1135Û"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+osquid:CommentedOutCodeLinež"<This block of commented-out lines of code should be removed.(½ôØ­üÿÿÿÿ8ó†¡ÄÁ-
+Osquid:S1135"2Complete the task associated to this TODO comment.(àøö×ûÿÿÿÿ
+osquid:CommentedOutCodeLine’"<This block of commented-out lines of code should be removed.(ÿÙ–‡ýÿÿÿÿ8ó†¡ÄÁ-
+osquid:CommentedOutCodeLine”"<This block of commented-out lines of code should be removed.(½ôØ­üÿÿÿÿ8ó†¡ÄÁ-
+Osquid:S1135"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Osquid:S1135´"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Vsquid:S1135‰"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ8ÍÞ ÄÁ-
+|squid:S1488R"`Immediately return this expression instead of assigning it to the temporary variable "fragment".(§›’ëùÿÿÿÿ
+Nsquid:S1135q"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Osquid:S1135 "2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+^squid:S1126¬"AReplace this if-then-else statement by a single return statement.(¤¦ß‘üÿÿÿÿ
+Osquid:S1135†"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+jsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÕáÁÖ8ÃÅõÁ-
+Osquid:S1135«"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Osquid:S1135Ü"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Vsquid:S1135Œ"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ8ÃøºÄÁ-
+Osquid:S1135œ"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Vsquid:S1135Ä"2Complete the task associated to this TODO comment.(ÕÌ®þÿÿÿÿ8Ã´ÏÂ-
+dsquid:S2147Æ"ECombine this catch with the one at line 579, which has the same body.(ï­£Ä8Ã´ÏÂ-
+@squid:S1148¡"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ
+@squid:S1148½"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ
+@squid:S1185‹"(Remove this method to simply inherit it.(ÚÝË 
+Osquid:S1135È"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Q"squid:SwitchLastCaseIsDefaultCheckÜ""Add a default case to this switch.(ýä¼ù
+jsquid:CommentedOutCodeLineÈ"<This block of commented-out lines of code should be removed.(¶¬å»8¾ûí¹Á-
+Nsquid:S1135X"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Gsquid:S1148Å"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8Ã´ÏÂ-
+W
+squid:S899¸";Do something with the "boolean" value returned by "delete".(é‘‚©úÿÿÿÿ
+Gsquid:S1148È"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8Ã´ÏÂ-

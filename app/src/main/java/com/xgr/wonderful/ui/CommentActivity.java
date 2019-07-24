@@ -28,6 +28,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -174,9 +175,9 @@ public class CommentActivity extends BasePageActivity implements
 			commentItemImage.setVisibility(View.VISIBLE);
 			ImageLoader.getInstance().displayImage(
 					qiangYu.getContentfigureurl().getFileUrl(
-							CommentActivity.this) == null ? "" : qiangYu
+							) == null ? "" : qiangYu
 							.getContentfigureurl().getFileUrl(
-									CommentActivity.this),
+									),
 					commentItemImage,
 					MyApplication.getInstance().getOptions(
 							R.drawable.bg_pic_loading),
@@ -216,7 +217,7 @@ public class CommentActivity extends BasePageActivity implements
 		BmobFile avatar = user.getAvatar();
 		if (null != avatar) {
 			ImageLoader.getInstance().displayImage(
-					avatar.getFileUrl(CommentActivity.this),
+					avatar.getFileUrl(),
 					userLogo,
 					MyApplication.getInstance().getOptions(
 							R.drawable.content_image_default),
@@ -261,13 +262,13 @@ public class CommentActivity extends BasePageActivity implements
 		query.order("createdAt");
 		query.setLimit(Constant.NUMBERS_PER_PAGE);
 		query.setSkip(Constant.NUMBERS_PER_PAGE * (pageNum++));
-		query.findObjects(this, new FindListener<Comment>() {
+		query.findObjects( new FindListener<Comment>() {
 
 			@Override
-			public void onSuccess(List<Comment> data) {
+			public void done(List<Comment> data, BmobException e) {
 				// TODO Auto-generated method stub
-				LogUtils.i(TAG, "get comment success!" + data.size());
-				if (data.size() != 0 && data.get(data.size() - 1) != null) {
+//				LogUtils.i(TAG, "get comment success!" + data.size());
+				if (data!=null && data.size() != 0 && data.get(data.size() - 1) != null) {
 
 					if (data.size() < Constant.NUMBERS_PER_PAGE) {
 						ActivityUtil.show(mContext, "已加载完所有评论~");
@@ -285,12 +286,6 @@ public class CommentActivity extends BasePageActivity implements
 				}
 			}
 
-			@Override
-			public void onError(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				ActivityUtil.show(CommentActivity.this, "获取评论失败。请检查网络~");
-				pageNum--;
-			}
 		});
 	}
 
@@ -330,7 +325,7 @@ public class CommentActivity extends BasePageActivity implements
 	private void onClickUserLogo() {
 		// TODO Auto-generated method stub
 		// 跳转到个人信息界面
-		User currentUser = BmobUser.getCurrentUser(this, User.class);
+		User currentUser = BmobUser.getCurrentUser( User.class);
 		if (currentUser != null) {// 已登录
 			Intent intent = new Intent();
 			intent.setClass(MyApplication.getInstance().getTopActivity(),
@@ -351,7 +346,7 @@ public class CommentActivity extends BasePageActivity implements
 
 	private void onClickCommit() {
 		// TODO Auto-generated method stub
-		User currentUser = BmobUser.getCurrentUser(this, User.class);
+		User currentUser = BmobUser.getCurrentUser( User.class);
 		if (currentUser != null) {// 已登录
 			commentEdit = commentContent.getText().toString().trim();
 			if (TextUtils.isEmpty(commentEdit)) {
@@ -374,10 +369,10 @@ public class CommentActivity extends BasePageActivity implements
 		final Comment comment = new Comment();
 		comment.setUser(user);
 		comment.setCommentContent(content);
-		comment.save(this, new SaveListener() {
+		comment.save( new SaveListener() {
 
 			@Override
-			public void onSuccess() {
+			public void done(Object o, BmobException e) {
 				// TODO Auto-generated method stub
 				ActivityUtil.show(CommentActivity.this, "评论成功。");
 				if (mAdapter.getDataList().size() < Constant.NUMBERS_PER_PAGE) {
@@ -392,36 +387,23 @@ public class CommentActivity extends BasePageActivity implements
 				BmobRelation relation = new BmobRelation();
 				relation.add(comment);
 				qiangYu.setRelation(relation);
-				qiangYu.update(mContext, new UpdateListener() {
+				qiangYu.update( new UpdateListener() {
 
 					@Override
-					public void onSuccess() {
-						// TODO Auto-generated method stub
-						LogUtils.i(TAG, "更新评论成功。");
-						// fetchData();
+					public void done(BmobException e) {
+
 					}
 
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						// TODO Auto-generated method stub
-						LogUtils.i(TAG, "更新评论失败。" + arg1);
-					}
 				});
-
 			}
 
-			@Override
-			public void onFailure(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				ActivityUtil.show(CommentActivity.this, "评论失败。请检查网络~");
-			}
 		});
 	}
 
 	private void onClickFav(View v) {
 		// TODO Auto-generated method stub
 
-		User user = BmobUser.getCurrentUser(this, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		if (user != null && user.getSessionToken() != null) {
 			BmobRelation favRelaton = new BmobRelation();
 			qiangYu.setMyFav(!qiangYu.getMyFav());
@@ -438,24 +420,15 @@ public class CommentActivity extends BasePageActivity implements
 			}
 
 			user.setFavorite(favRelaton);
-			user.update(this, new UpdateListener() {
+			user.update( new UpdateListener() {
 
 				@Override
-				public void onSuccess() {
+				public void done(BmobException e) {
 					// TODO Auto-generated method stub
 					LogUtils.i(TAG, "收藏成功。");
 					ActivityUtil.show(CommentActivity.this, "收藏成功。");
-					// try get fav to see if fav success
-					// getMyFavourite();
 				}
 
-				@Override
-				public void onFailure(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					LogUtils.i(TAG, "收藏失败。请检查网络~");
-					ActivityUtil.show(CommentActivity.this, "收藏失败。请检查网络~"
-							+ arg0);
-				}
 			});
 		} else {
 			// 前往登录注册界面
@@ -468,28 +441,22 @@ public class CommentActivity extends BasePageActivity implements
 	}
 
 	private void getMyFavourite() {
-		User user = BmobUser.getCurrentUser(this, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		if (user != null) {
 			BmobQuery<QiangYu> query = new BmobQuery<QiangYu>();
 			query.addWhereRelatedTo("favorite", new BmobPointer(user));
 			query.include("user");
 			query.order("createdAt");
 			query.setLimit(Constant.NUMBERS_PER_PAGE);
-			query.findObjects(this, new FindListener<QiangYu>() {
+			query.findObjects( new FindListener<QiangYu>() {
 
 				@Override
-				public void onSuccess(List<QiangYu> data) {
-					// TODO Auto-generated method stub
+				public void done(List<QiangYu> data, BmobException e) {
 					LogUtils.i(TAG, "get fav success!" + data.size());
 					ActivityUtil.show(CommentActivity.this,
 							"fav size:" + data.size());
 				}
 
-				@Override
-				public void onError(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					ActivityUtil.show(CommentActivity.this, "获取收藏失败。请检查网络~");
-				}
 			});
 		} else {
 			// 前往登录注册界面
@@ -504,7 +471,7 @@ public class CommentActivity extends BasePageActivity implements
 
 	private void onClickLove() {
 		// TODO Auto-generated method stub
-		User user = BmobUser.getCurrentUser(this, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		if (user == null) {
 			// 前往登录注册界面
 			ActivityUtil.show(this, "请先登录。");
@@ -525,10 +492,10 @@ public class CommentActivity extends BasePageActivity implements
 		love.setTextColor(Color.parseColor("#D95555"));
 		love.setText(qiangYu.getLove() + "");
 		qiangYu.increment("love", 1);
-		qiangYu.update(mContext, new UpdateListener() {
+		qiangYu.update( new UpdateListener() {
 
 			@Override
-			public void onSuccess() {
+			public void done(BmobException e) {
 				// TODO Auto-generated method stub
 				qiangYu.setMyLove(true);
 				qiangYu.setMyFav(isFav);
@@ -537,10 +504,6 @@ public class CommentActivity extends BasePageActivity implements
 				ActivityUtil.show(mContext, "点赞成功~");
 			}
 
-			@Override
-			public void onFailure(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-			}
 		});
 	}
 
@@ -549,19 +512,14 @@ public class CommentActivity extends BasePageActivity implements
 		qiangYu.setHate(qiangYu.getHate() + 1);
 		hate.setText(qiangYu.getHate() + "");
 		qiangYu.increment("hate", 1);
-		qiangYu.update(mContext, new UpdateListener() {
+		qiangYu.update( new UpdateListener() {
 
 			@Override
-			public void onSuccess() {
-				// TODO Auto-generated method stub
+			public void done(BmobException e) {
 				ActivityUtil.show(mContext, "点踩成功~");
-			}
-
-			@Override
-			public void onFailure(int arg0, String arg1) {
-				// TODO Auto-generated method stub
 
 			}
+
 		});
 	}
 
@@ -578,7 +536,7 @@ public class CommentActivity extends BasePageActivity implements
 		String comment = "来领略最美的风景吧";
 		String img = null;
 		if (qy.getContentfigureurl() != null) {
-			img = qy.getContentfigureurl().getFileUrl(CommentActivity.this);
+			img = qy.getContentfigureurl().getFileUrl();
 		} else {
 			img = "http://www.codenow.cn/appwebsite/website/yyquan/uploads/53af6851d5d72.png";
 		}

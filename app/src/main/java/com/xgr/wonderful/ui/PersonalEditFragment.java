@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
@@ -100,7 +101,7 @@ public class PersonalEditFragment extends BaseHomeFragment implements
 	@Override
 	protected void setupViews(Bundle bundle) {
 		// TODO Auto-generated method stub
-		currentUser = BmobUser.getCurrentUser(mContext, User.class);
+		currentUser = BmobUser.getCurrentUser( User.class);
 		sexChoice
 				.check(currentUser.getSex().equals(Constant.SEX_MALE) ? R.id.personal_sex_male
 						: R.id.personal_sex_female);
@@ -108,7 +109,7 @@ public class PersonalEditFragment extends BaseHomeFragment implements
 		BmobFile avatarFile = currentUser.getAvatar();
 		if (null != avatarFile) {
 			ImageLoader.getInstance().displayImage(
-					avatarFile.getFileUrl(mContext),
+					avatarFile.getFileUrl(),
 					userIcon,
 					MyApplication.getInstance().getOptions(
 							R.drawable.ic_launcher),
@@ -183,48 +184,7 @@ public class PersonalEditFragment extends BaseHomeFragment implements
 	private void setAvata(String avataPath) {
 		if (avataPath != null) {
 			final BmobFile file = new BmobFile(new File(iconUrl));
-			file.upload(mContext, new UploadFileListener() {
-
-				@Override
-				public void onSuccess() {
-					// TODO Auto-generated method stub
-					LogUtils.i(TAG, "上传文件成功。" + file.getFileUrl(mContext));
-					currentUser.setAvatar(file);
-					if (!TextUtils.isEmpty(signatureEdit.getText().toString()
-							.trim())) {
-						currentUser.setSignature(signatureEdit.getText()
-								.toString().trim());
-					}
-					currentUser.setSex(newSex);
-					currentUser.update(mContext, new UpdateListener() {
-
-						@Override
-						public void onSuccess() {
-							// TODO Auto-generated method stub
-							ActivityUtil.show(getActivity(), "更新信息成功。");
-							currentUser = BmobUser.getCurrentUser(
-									getActivity(), User.class);
-							LogUtils.i(
-									TAG,
-									"new url:"
-											+ BmobUser
-													.getCurrentUser(
-															getActivity(),
-															User.class)
-													.getAvatar()
-													.getFileUrl(mContext));
-							getActivity().setResult(Activity.RESULT_OK);
-							getActivity().finish();
-						}
-
-						@Override
-						public void onFailure(int arg0, String arg1) {
-							// TODO Auto-generated method stub
-							ActivityUtil.show(getActivity(), "更新信息失败。请检查网络~");
-							LogUtils.i(TAG, "更新失败2-->" + arg0);
-						}
-					});
-				}
+			file.upload( new UploadFileListener() {
 
 				@Override
 				public void onProgress(Integer arg0) {
@@ -233,10 +193,38 @@ public class PersonalEditFragment extends BaseHomeFragment implements
 				}
 
 				@Override
-				public void onFailure(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					LogUtils.i(TAG, "上传文件失败。" + arg1);
+				public void done(BmobException e) {
+					LogUtils.i(TAG, "上传文件成功。" + file.getFileUrl());
+					currentUser.setAvatar(file);
+					if (!TextUtils.isEmpty(signatureEdit.getText().toString()
+							.trim())) {
+						currentUser.setSignature(signatureEdit.getText()
+								.toString().trim());
+					}
+					currentUser.setSex(newSex);
+					currentUser.update( new UpdateListener() {
+
+						@Override
+						public void done(BmobException e) {
+							// TODO Auto-generated method stub
+							ActivityUtil.show(getActivity(), "更新信息成功。");
+							currentUser = BmobUser.getCurrentUser(
+									User.class);
+							LogUtils.i(
+									TAG,
+									"new url:"
+											+ BmobUser
+											.getCurrentUser(
+													User.class)
+											.getAvatar()
+											.getFileUrl());
+							getActivity().setResult(Activity.RESULT_OK);
+							getActivity().finish();
+						}
+
+					});
 				}
+
 			});
 		} else {
 			currentUser.setSex(newSex);
@@ -244,10 +232,10 @@ public class PersonalEditFragment extends BaseHomeFragment implements
 				currentUser.setSignature(signatureEdit.getText().toString()
 						.trim());
 			}
-			currentUser.update(mContext, new UpdateListener() {
+			currentUser.update( new UpdateListener() {
 
 				@Override
-				public void onSuccess() {
+				public void done(BmobException e) {
 					// TODO Auto-generated method stub
 					ActivityUtil.show(getActivity(), "更新信息成功。");
 					LogUtils.i(TAG, "更新信息成功。");
@@ -255,12 +243,6 @@ public class PersonalEditFragment extends BaseHomeFragment implements
 					getActivity().finish();
 				}
 
-				@Override
-				public void onFailure(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					ActivityUtil.show(getActivity(), "更新信息失败。请检查网络~");
-					LogUtils.i(TAG, "更新失败1-->" + arg1);
-				}
 			});
 		}
 	}

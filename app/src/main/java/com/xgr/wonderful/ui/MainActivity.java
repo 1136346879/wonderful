@@ -1,5 +1,6 @@
 package com.xgr.wonderful.ui;
 
+import com.xgr.wonderful.entity.User;
 import net.youmi.android.offers.OffersManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -110,7 +111,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 			break;
 		case R.id.topbar_menu_right:
 			// 当前用户登录
-			BmobUser currentUser = BmobUser.getCurrentUser(MainActivity.this);
+			BmobUser currentUser = BmobUser.getCurrentUser(User.class);
 			if (currentUser != null) {
 				// 允许用户使用应用,即有了用户的唯一标识符，可以作为发布内容的字段
 				String name = currentUser.getUsername();

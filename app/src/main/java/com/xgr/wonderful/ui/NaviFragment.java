@@ -1,13 +1,14 @@
 package com.xgr.wonderful.ui;
 
 
+import com.xgr.wonderful.entity.User;
 import net.youmi.android.offers.OffersManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -195,7 +196,7 @@ public class NaviFragment extends Fragment implements OnClickListener
 
 //        	FeedbackAgent agent = new FeedbackAgent(mActivity);
 //			agent.startFeedbackActivity();
-        	BmobUser currentUser = BmobUser.getCurrentUser(mActivity);
+        	BmobUser currentUser = BmobUser.getCurrentUser(User.class);
 			if (currentUser != null) {
 				// 允许用户使用应用,即有了用户的唯一标识符，可以作为发布内容的字段
 				hideFragments(transaction);

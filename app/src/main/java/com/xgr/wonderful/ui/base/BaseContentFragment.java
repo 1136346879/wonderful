@@ -20,6 +20,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -132,7 +133,7 @@ public abstract class BaseContentFragment extends BaseFragment{
 	
 	public void fetchData(){
 		setState(LOADING);
-		User user = BmobUser.getCurrentUser(mContext, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		BmobQuery<QiangYu> query = new BmobQuery<QiangYu>();
 		query.addWhereRelatedTo("favorite", new BmobPointer(user));
 		query.order("-createdAt");
@@ -141,10 +142,10 @@ public abstract class BaseContentFragment extends BaseFragment{
 		query.addWhereLessThan("createdAt", date);
 		query.setSkip(Constant.NUMBERS_PER_PAGE*(pageNum++));
 		query.include("author");
-		query.findObjects(getActivity(), new FindListener<QiangYu>() {
-			
+		query.findObjects( new FindListener<QiangYu>() {
+
 			@Override
-			public void onSuccess(List<QiangYu> list) {
+			public void done(List<QiangYu> list, BmobException e) {
 				// TODO Auto-generated method stub
 				LogUtils.i(TAG,"find success."+list.size());
 				if(list.size()!=0&&list.get(list.size()-1)!=null){
@@ -156,19 +157,19 @@ public abstract class BaseContentFragment extends BaseFragment{
 					}
 					mListItems.addAll(list);
 					mAdapter.notifyDataSetChanged();
-					
+
 					LogUtils.i(TAG,"DD"+(mListItems.get(mListItems.size()-1)==null));
 					setState(LOADING_COMPLETED);
 					mPullRefreshListView.onRefreshComplete();
 				}else{
 					ActivityUtil.show(getActivity(), "暂无更多数据~");
 					if(list.size()==0&&mListItems.size()==0){
-						
+
 						networkTips.setText("暂无收藏。快去首页收藏几个把~");
 						setState(LOADING_FAILED);
 						pageNum--;
 						mPullRefreshListView.onRefreshComplete();
-						
+
 						LogUtils.i(TAG,"SIZE:"+list.size()+"ssssize"+mListItems.size());
 						return;
 					}
@@ -178,14 +179,6 @@ public abstract class BaseContentFragment extends BaseFragment{
 				}
 			}
 
-			@Override
-			public void onError(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				LogUtils.i(TAG,"find failed."+arg1);
-				pageNum--;
-				setState(LOADING_FAILED);
-				mPullRefreshListView.onRefreshComplete();
-			}
 		});
 	}
 	

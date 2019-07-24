@@ -1,10 +1,9 @@
 package com.xgr.wonderful.adapter;
 
 import com.xgr.wonderful.ui.QiangContentFragment;
-import com.xgr.wonderful.utils.Constant;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public class QiangContentAdapter extends SmartFragmentStatePagerAdapter {
 

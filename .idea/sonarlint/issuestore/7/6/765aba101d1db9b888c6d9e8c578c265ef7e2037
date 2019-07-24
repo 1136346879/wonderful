@@ -1,0 +1,22 @@
+
+Zsquid:S1155w">Use isEmpty() to check whether the collection is empty or not.(ÅŽÚ†ýÿÿÿÿ
+Gsquid:S10685"0Remove this unused "pullFromUser" private field.(¬Ê°ö
+Nsquid:S1135L"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Vsquid:UselessImportCheck"2Remove this unused import 'cn.bmob.v3.BmobObject'.(°Ú§¡
+Nsquid:S1135="2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+psquid:S1450-"ZRemove the "contentView" field and declare it as a local variable in the relevant methods.(íé÷b
+Nsquid:S1135"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+[squid:S1155À">Use isEmpty() to check whether the collection is empty or not.(ÅŽÚ†ýÿÿÿÿ
+Lsquid:S1068+"0Remove this unused "lastItemTime" private field.(¢å’üÿÿÿÿ
+ysquid:S14501"]Remove the "actualListView" field and declare it as a local variable in the relevant methods.(ÑÝëÆúÿÿÿÿ
+[squid:S1155Ñ">Use isEmpty() to check whether the collection is empty or not.(ÅŽÚ†ýÿÿÿÿ
+Nsquid:S1135d"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135m"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+usquid:S2293s"YReplace the type specification in this constructor call with the diamond operator ("<>").(úîçÒûÿÿÿÿ
+ssquid:S1488E"]Immediately return this expression instead of assigning it to the temporary variable "times".(ò¥•Z
+qsquid:S2293‰"YReplace the type specification in this constructor call with the diamond operator ("<>").(»¦ÐÃ
+Nsquid:S1135W"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Vsquid:S1135•"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ8Ö¡¥ÅÁ-
+bsquid:S1155—">Use isEmpty() to check whether the collection is empty or not.(·–ªðûÿÿÿÿ8Ö¡¥ÅÁ-
+]squid:S1155¦">Use isEmpty() to check whether the collection is empty or not.(øæîØ8Ö¡¥ÅÁ-
+]squid:S1155¦">Use isEmpty() to check whether the collection is empty or not.(øæîØ8Ö¡¥ÅÁ-

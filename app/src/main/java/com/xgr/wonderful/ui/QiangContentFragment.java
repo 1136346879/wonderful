@@ -21,6 +21,7 @@ import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobQuery.CachePolicy;
 import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -176,13 +177,13 @@ public class QiangContentFragment extends BaseFragment{
 		query.setSkip(Constant.NUMBERS_PER_PAGE*(pageNum++));
 		LogUtils.i(TAG,"SIZE:"+Constant.NUMBERS_PER_PAGE*pageNum);
 		query.include("author");
-		query.findObjects(getActivity(), new FindListener<QiangYu>() {
-			
+		query.findObjects( new FindListener<QiangYu>() {
+
 			@Override
-			public void onSuccess(List<QiangYu> list) {
+			public void done(List<QiangYu> list, BmobException e) {
 				// TODO Auto-generated method stub
-				LogUtils.i(TAG,"find success."+list.size());
-				if(list.size()!=0&&list.get(list.size()-1)!=null){
+//				LogUtils.i(TAG,"find success."+list.size());
+				if(list!=null &&list.size()!=0&&list.get(list.size()-1)!=null){
 					if(mRefreshType==RefreshType.REFRESH){
 						mListItems.clear();
 					}
@@ -194,7 +195,7 @@ public class QiangContentFragment extends BaseFragment{
 					}
 					mListItems.addAll(list);
 					mAdapter.notifyDataSetChanged();
-					
+
 					setState(LOADING_COMPLETED);
 					mPullRefreshListView.onRefreshComplete();
 				}else{
@@ -203,15 +204,6 @@ public class QiangContentFragment extends BaseFragment{
 					setState(LOADING_COMPLETED);
 					mPullRefreshListView.onRefreshComplete();
 				}
-			}
-
-			@Override
-			public void onError(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				LogUtils.i(TAG,"find failed."+arg1);
-				pageNum--;
-				setState(LOADING_FAILED);
-				mPullRefreshListView.onRefreshComplete();
 			}
 		});
 	}

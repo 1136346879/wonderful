@@ -22,7 +22,7 @@
     <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar"
         style="@style/ActionBar" />
-    <android.support.v4.widget.DrawerLayout
+    <androidx.drawerlayout.widget.DrawerLayout
 	    android:id="@+id/drawer_layout"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
@@ -35,7 +35,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
 	        android:background="@drawable/qq_background" >
-	        	 <android.support.v4.view.ViewPager
+	        	 <androidx.viewpager.widget.ViewPager
          android:id="@+id/viewpager"
          android:layout_width="match_parent"
          android:layout_height="match_parent"
@@ -63,5 +63,5 @@
         	android:fastScrollEnabled="false"
         	android:smoothScrollbar="true" 
 	        />
-	</android.support.v4.widget.DrawerLayout>
+	</androidx.drawerlayout.widget.DrawerLayout>
 </LinearLayout>

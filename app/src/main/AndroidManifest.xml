@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+		  xmlns:tools="http://schemas.android.com/tools"
 		  package="com.xgr.wonderful"
 		  android:versionCode="3"
 		  android:versionName="1.0">
@@ -20,6 +21,15 @@
    	
    	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
    	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+	<!-- 允许联网 -->
+	<!-- 获取GSM（2g）、WCDMA（联通3g）等网络状态的信息 -->
+	<!-- 获取wifi网络状态的信息 -->
+	<!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
+	<!-- 获取sd卡写的权限，用于文件上传和下载 -->
+	<!-- 允许读取手机状态 用于创建BmobInstallation -->
+	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
    	
     <application
         android:allowBackup="true"
@@ -27,6 +37,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
 		tools:targetApi="n"
+		android:usesCleartextTraffic="true"
 		android:networkSecurityConfig="@xml/network_security_config"
         android:name="com.xgr.wonderful.MyApplication">
         <activity
@@ -166,7 +177,16 @@
 			<meta-data android:name="YOUMI_CHANNEL"
     				   android:value="10190" >
 			</meta-data>
-			
+		<!--数据共享-->
+		<provider
+				android:name="androidx.core.content.FileProvider"
+				android:authorities="com.xgr.wonderful"
+				android:exported="false"
+				android:grantUriPermissions="true">
+			<meta-data
+					android:name="android.support.FILE_PROVIDER_PATHS"
+					android:resource="@xml/file_paths"/>
+		</provider>
 			        <!-- openqq -->
          <activity
             android:name="com.tencent.connect.common.AssistActivity"
@@ -195,6 +215,21 @@
             android:name="InstallChannel"
             android:value="QD_91" />
         <!-- 注意：若填写的渠道为纯数字字符串类型，请不要超过int表示的范围！ < -->
+		<!-- 设置BmobAppKey -->
+		<meta-data
+				android:name="Bmob_APP_KEY"
+				android:value="fc482d9d2297f22bea9732daad201086"/>
+		<!-- 设置更新渠道，如果没有，则不要添加此行 -->
+		<meta-data
+				android:name="BMOB_CHANNEL"
+				android:value="bmob"/>
+
+
+		<provider
+				android:name="cn.bmob.v3.util.BmobContentProvider"
+				android:authorities="com.xgr.wonderful.BmobContentProvider">
+		</provider>
+		<uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
 
 </manifest>

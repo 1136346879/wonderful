@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
@@ -221,16 +222,8 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
 
 		final BmobFile figureFile = new BmobFile(new File(targeturl));
 
-		figureFile.upload(mContext, new UploadFileListener() {
+		figureFile.upload( new UploadFileListener() {
 
-			@Override
-			public void onSuccess() {
-				// TODO Auto-generated method stub
-				LogUtils.i(TAG,
-						"上传文件成功。" + figureFile.getFileUrl(EditActivity.this));
-				publishWithoutFigure(commitContent, figureFile);
-
-			}
 
 			@Override
 			public void onProgress(Integer arg0) {
@@ -238,18 +231,21 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
 
 			}
 
-			@Override
-			public void onFailure(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				LogUtils.i(TAG, "上传文件失败。" + arg1);
-			}
+            @Override
+            public void done(BmobException e) {
+                // TODO Auto-generated method stub
+                LogUtils.i(TAG,
+                        "上传文件成功。" + figureFile.getFileUrl());
+                publishWithoutFigure(commitContent, figureFile);
+            }
+
 		});
 
 	}
 
 	private void publishWithoutFigure(final String commitContent,
 			final BmobFile figureFile) {
-		User user = BmobUser.getCurrentUser(mContext, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 
 		final QiangYu qiangYu = new QiangYu();
 		qiangYu.setAuthor(user);
@@ -262,23 +258,21 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
 		qiangYu.setShare(0);
 		qiangYu.setComment(0);
 		qiangYu.setPass(true);
-		qiangYu.save(mContext, new SaveListener() {
+		qiangYu.save( new SaveListener() {
 
-			@Override
-			public void onSuccess() {
-				// TODO Auto-generated method stub
-				ActivityUtil.show(EditActivity.this, "发表成功！");
-				LogUtils.i(TAG, "创建成功。");
-				setResult(RESULT_OK);
-				finish();
-			}
+            @Override
+            public void done(Object o, BmobException e) {
 
-			@Override
-			public void onFailure(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				ActivityUtil.show(EditActivity.this, "发表失败！yg" + arg1);
-				LogUtils.i(TAG, "创建失败。" + arg1);
-			}
+            }
+
+            @Override
+            public void done(Object o, Object o2) {
+                // TODO Auto-generated method stub
+                ActivityUtil.show(EditActivity.this, "发表成功！");
+                LogUtils.i(TAG, "创建成功。");
+                setResult(RESULT_OK);
+                finish();
+            }
 		});
 	}
 

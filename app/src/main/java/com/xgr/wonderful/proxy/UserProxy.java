@@ -1,7 +1,8 @@
 package com.xgr.wonderful.proxy;
 
+import android.widget.Toast;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.listener.ResetPasswordListener;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -28,10 +29,10 @@ public class UserProxy {
 		user.setEmail(email);
 		user.setSex(Constant.SEX_FEMALE);
 		user.setSignature("这个家伙很懒，什么也不说。。。");
-		user.signUp(mContext, new SaveListener() {
-			
+		user.signUp( new SaveListener<Object>() {
+
 			@Override
-			public void onSuccess() {
+			public void done(Object o, BmobException e) {
 				// TODO Auto-generated method stub
 				if(signUpLister != null){
 					signUpLister.onSignUpSuccess();
@@ -40,15 +41,25 @@ public class UserProxy {
 				}
 			}
 
-			@Override
-			public void onFailure(int arg0, String msg) {
-				// TODO Auto-generated method stub
-				if(signUpLister != null){
-					signUpLister.onSignUpFailure(msg);
-				}else{
-					LogUtils.i(TAG,"signup listener is null,you must set one!");
-				}
-			}
+//			@Override
+//			public void onSuccess() {
+//				// TODO Auto-generated method stub
+//				if(signUpLister != null){
+//					signUpLister.onSignUpSuccess();
+//				}else{
+//					LogUtils.i(TAG,"signup listener is null,you must set one!");
+//				}
+//			}
+//
+//			@Override
+//			public void onFailure(int arg0, String msg) {
+//				// TODO Auto-generated method stub
+//				if(signUpLister != null){
+//					signUpLister.onSignUpFailure(msg);
+//				}else{
+//					LogUtils.i(TAG,"signup listener is null,you must set one!");
+//				}
+//			}
 		});
 	}
 	
@@ -63,7 +74,7 @@ public class UserProxy {
 	
 	
 	public User getCurrentUser(){
-		User user = BmobUser.getCurrentUser(mContext, User.class);
+		User user = BmobUser.getCurrentUser(User.class);
 		if(user != null){
 			LogUtils.i(TAG,"本地用户信息" + user.getObjectId() + "-"
 					+ user.getUsername() + "-"
@@ -83,23 +94,16 @@ public class UserProxy {
 		final BmobUser user = new BmobUser();
 		user.setUsername(userName);
 		user.setPassword(password);
-		user.login(mContext, new SaveListener() {
-			
+		user.login(new SaveListener<Object>() {
 			@Override
-			public void onSuccess() {
+			public void done(Object o, BmobException e) {
+				if(o==null){
+					Toast.makeText(mContext,"请检查用户名和密码",1).show();
+					return;
+				}
 				// TODO Auto-generated method stub
 				if(loginListener != null){
 					loginListener.onLoginSuccess();
-				}else{
-					LogUtils.i(TAG, "login listener is null,you must set one!");
-				}
-			}
-
-			@Override
-			public void onFailure(int arg0, String msg) {
-				// TODO Auto-generated method stub
-				if(loginListener != null){
-					loginListener.onLoginFailure(msg);
 				}else{
 					LogUtils.i(TAG, "login listener is null,you must set one!");
 				}
@@ -117,7 +121,7 @@ public class UserProxy {
 	}
 	
 	public void logout(){
-		BmobUser.logOut(mContext);
+		BmobUser.logOut();
 		LogUtils.i(TAG, "logout result:"+(null == getCurrentUser()));
 	}
 	
@@ -129,10 +133,10 @@ public class UserProxy {
 		user.setSex(args[3]);
 		user.setSignature(args[4]);
 		//...
-		user.update(mContext, new UpdateListener() {
-			
+		user.update( new UpdateListener() {
+
 			@Override
-			public void onSuccess() {
+			public void done(BmobException e) {
 				// TODO Auto-generated method stub
 				if(updateListener != null){
 					updateListener.onUpdateSuccess();
@@ -141,15 +145,6 @@ public class UserProxy {
 				}
 			}
 
-			@Override
-			public void onFailure(int arg0, String msg) {
-				// TODO Auto-generated method stub
-				if(updateListener != null){
-					updateListener.onUpdateFailure(msg);
-				}else{
-					LogUtils.i(TAG,"update listener is null,you must set one!");
-				}
-			}
 		});
 	}
 	
@@ -163,28 +158,39 @@ public class UserProxy {
 	}
 	
 	public void resetPassword(String email){
-		BmobUser.resetPassword(mContext, email, new ResetPasswordListener() {
-			
-			@Override
-			public void onSuccess() {
-				// TODO Auto-generated method stub
-				if(resetPasswordListener != null){
+		BmobUser.resetPasswordByEmail(email, new UpdateListener(){
+
+					@Override
+					public void done(BmobException e) {
+						if(resetPasswordListener != null){
 					resetPasswordListener.onResetSuccess();
 				}else{
 					LogUtils.i(TAG,"reset listener is null,you must set one!");
 				}
-			}
-
-			@Override
-			public void onFailure(int arg0, String msg) {
-				// TODO Auto-generated method stub
-				if(resetPasswordListener != null){
-					resetPasswordListener.onResetFailure(msg);
-				}else{
-					LogUtils.i(TAG,"reset listener is null,you must set one!");
+					}
 				}
-			}
-		});
+
+
+//			@Override
+//			public void onSuccess() {
+//				// TODO Auto-generated method stub
+//				if(resetPasswordListener != null){
+//					resetPasswordListener.onResetSuccess();
+//				}else{
+//					LogUtils.i(TAG,"reset listener is null,you must set one!");
+//				}
+//			}
+//
+//			@Override
+//			public void onFailure(int arg0, String msg) {
+//				// TODO Auto-generated method stub
+//				if(resetPasswordListener != null){
+//					resetPasswordListener.onResetFailure(msg);
+//				}else{
+//					LogUtils.i(TAG,"reset listener is null,you must set one!");
+//				}
+//			}
+		);
 	}
 	public interface IResetPasswordListener{
 		void onResetSuccess();

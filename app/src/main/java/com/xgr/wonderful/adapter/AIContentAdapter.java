@@ -16,6 +16,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -90,7 +91,7 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 		}
 		String avatarUrl = null;
 		if (user.getAvatar() != null) {
-			avatarUrl = user.getAvatar().getFileUrl(mContext);
+			avatarUrl = user.getAvatar().getFileUrl();
 		}
 		ImageLoader.getInstance().displayImage(
 				avatarUrl,
@@ -147,9 +148,9 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 			ImageLoader
 					.getInstance()
 					.displayImage(
-							entity.getContentfigureurl().getFileUrl(mContext) == null ? ""
+							entity.getContentfigureurl().getFileUrl() == null ? ""
 									: entity.getContentfigureurl().getFileUrl(
-											mContext),
+											),
 							viewHolder.contentImage,
 							MyApplication.getInstance().getOptions(
 									R.drawable.bg_pic_loading),
@@ -220,10 +221,10 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 				if (entity.getMyFav()) {
 					entity.setMyFav(false);
 				}
-				entity.update(mContext, new UpdateListener() {
+				entity.update( new UpdateListener() {
 
 					@Override
-					public void onSuccess() {
+					public void done(BmobException e) {
 						// TODO Auto-generated method stub
 						entity.setMyLove(true);
 						entity.setMyFav(oldFav);
@@ -232,12 +233,22 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 						LogUtils.i(TAG, "点赞成功~");
 					}
 
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						// TODO Auto-generated method stub
-						entity.setMyLove(true);
-						entity.setMyFav(oldFav);
-					}
+//					@Override
+//					public void onSuccess() {
+//						// TODO Auto-generated method stub
+//						entity.setMyLove(true);
+//						entity.setMyFav(oldFav);
+//						DatabaseUtil.getInstance(mContext).insertFav(entity);
+//						// DatabaseUtil.getInstance(mContext).queryFav();
+//						LogUtils.i(TAG, "点赞成功~");
+//					}
+//
+//					@Override
+//					public void onFailure(int arg0, String arg1) {
+//						// TODO Auto-generated method stub
+//						entity.setMyLove(true);
+//						entity.setMyFav(oldFav);
+//					}
 				});
 			}
 		});
@@ -249,19 +260,14 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 				entity.setHate(entity.getHate() + 1);
 				viewHolder.hate.setText(entity.getHate() + "");
 				entity.increment("hate", 1);
-				entity.update(mContext, new UpdateListener() {
+				entity.update( new UpdateListener() {
 
 					@Override
-					public void onSuccess() {
+					public void done(BmobException e) {
 						// TODO Auto-generated method stub
 						ActivityUtil.show(mContext, "点踩成功~");
 					}
 
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						// TODO Auto-generated method stub
-
-					}
 				});
 			}
 		});
@@ -327,7 +333,7 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 		String comment = "来领略最美的风景吧";
 		String img = null;
 		if (qy.getContentfigureurl() != null) {
-			img = qy.getContentfigureurl().getFileUrl(mContext);
+			img = qy.getContentfigureurl().getFileUrl();
 		} else {
 			img = "http://www.codenow.cn/appwebsite/website/yyquan/uploads/53af6851d5d72.png";
 		}
@@ -354,7 +360,7 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 
 	private void onClickFav(View v, final QiangYu qiangYu) {
 		// TODO Auto-generated method stub
-		User user = BmobUser.getCurrentUser(mContext, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		if (user != null && user.getSessionToken() != null) {
 			BmobRelation favRelaton = new BmobRelation();
 
@@ -365,22 +371,15 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 				favRelaton.add(qiangYu);
 				user.setFavorite(favRelaton);
 				ActivityUtil.show(mContext, "收藏成功。");
-				user.update(mContext, new UpdateListener() {
+				user.update( new UpdateListener() {
 
 					@Override
-					public void onSuccess() {
+					public void done(BmobException e) {
 						// TODO Auto-generated method stub
 						DatabaseUtil.getInstance(mContext).insertFav(qiangYu);
 						LogUtils.i(TAG, "收藏成功。");
 						// try get fav to see if fav success
 						// getMyFavourite();
-					}
-
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						// TODO Auto-generated method stub
-						LogUtils.i(TAG, "收藏失败。请检查网络~");
-						ActivityUtil.show(mContext, "收藏失败。请检查网络~" + arg0);
 					}
 				});
 
@@ -390,10 +389,10 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 				favRelaton.remove(qiangYu);
 				user.setFavorite(favRelaton);
 				ActivityUtil.show(mContext, "取消收藏。");
-				user.update(mContext, new UpdateListener() {
+				user.update( new UpdateListener() {
 
 					@Override
-					public void onSuccess() {
+					public void done(BmobException e) {
 						// TODO Auto-generated method stub
 						DatabaseUtil.getInstance(mContext).deleteFav(qiangYu);
 						LogUtils.i(TAG, "取消收藏。");
@@ -401,12 +400,6 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 						// getMyFavourite();
 					}
 
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						// TODO Auto-generated method stub
-						LogUtils.i(TAG, "取消收藏失败。请检查网络~");
-						ActivityUtil.show(mContext, "取消收藏失败。请检查网络~" + arg0);
-					}
 				});
 			}
 
@@ -421,27 +414,22 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 	}
 
 	private void getMyFavourite() {
-		User user = BmobUser.getCurrentUser(mContext, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		if (user != null) {
 			BmobQuery<QiangYu> query = new BmobQuery<QiangYu>();
 			query.addWhereRelatedTo("favorite", new BmobPointer(user));
 			query.include("user");
 			query.order("createdAt");
 			query.setLimit(Constant.NUMBERS_PER_PAGE);
-			query.findObjects(mContext, new FindListener<QiangYu>() {
+			query.findObjects( new FindListener<QiangYu>() {
 
 				@Override
-				public void onSuccess(List<QiangYu> data) {
+				public void done(List<QiangYu> data, BmobException e) {
 					// TODO Auto-generated method stub
 					LogUtils.i(TAG, "get fav success!" + data.size());
 					ActivityUtil.show(mContext, "fav size:" + data.size());
 				}
 
-				@Override
-				public void onError(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					ActivityUtil.show(mContext, "获取收藏失败。请检查网络~");
-				}
 			});
 		} else {
 			// 前往登录注册界面

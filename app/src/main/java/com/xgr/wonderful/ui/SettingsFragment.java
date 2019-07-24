@@ -6,9 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,11 +29,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
@@ -46,6 +50,7 @@ import com.xgr.wonderful.utils.ActivityUtil;
 import com.xgr.wonderful.utils.CacheUtils;
 import com.xgr.wonderful.utils.Constant;
 import com.xgr.wonderful.utils.LogUtils;
+import io.reactivex.functions.Consumer;
 
 public class SettingsFragment extends BaseHomeFragment implements
 		OnClickListener, OnCheckedChangeListener {
@@ -110,7 +115,7 @@ public class SettingsFragment extends BaseHomeFragment implements
 	}
 
 	private void initPersonalInfo() {
-		User user = BmobUser.getCurrentUser(mContext, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		if (user != null) {
 			nickName.setText(user.getUsername());
 			signature.setText(user.getSignature());
@@ -124,7 +129,7 @@ public class SettingsFragment extends BaseHomeFragment implements
 			BmobFile avatarFile = user.getAvatar();
 			if (null != avatarFile) {
 				ImageLoader.getInstance().displayImage(
-						avatarFile.getFileUrl(mContext),
+						avatarFile.getFileUrl(),
 						userIcon,
 						MyApplication.getInstance().getOptions(
 								R.drawable.user_icon_default_main),
@@ -163,7 +168,7 @@ public class SettingsFragment extends BaseHomeFragment implements
 	 * @return
 	 */
 	private boolean isLogined() {
-		BmobUser user = BmobUser.getCurrentUser(mContext, User.class);
+		BmobUser user = BmobUser.getCurrentUser( User.class);
 		if (user != null) {
 			return true;
 		}
@@ -196,7 +201,7 @@ public class SettingsFragment extends BaseHomeFragment implements
 		switch (v.getId()) {
 		case R.id.user_logout:
 			if (isLogined()) {
-				BmobUser.logOut(mContext);
+				BmobUser.logOut();
 				ActivityUtil.show(getActivity(), "登出成功。");
 			} else {
 				redictToLogin(GO_LOGIN);
@@ -320,9 +325,22 @@ public class SettingsFragment extends BaseHomeFragment implements
 	}
 
 	private void getAvataFromAlbum() {
-		Intent intent2 = new Intent(Intent.ACTION_GET_CONTENT);
-		intent2.setType("image/*");
-		startActivityForResult(intent2, 2);
+//		Intent intent2 = new Intent(Intent.ACTION_GET_CONTENT);
+//		intent2.setType("image/*");
+//		startActivityForResult(intent2, 2);
+		RxPermissions rxPermissions = new RxPermissions(this);
+		rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+				.subscribe(new Consumer<Boolean>() {
+					@Override
+					public void accept(Boolean aBoolean) throws Exception {
+						if(aBoolean){
+							Intent intent =new  Intent(Intent.ACTION_PICK, null);
+							// 如果要限制上传到服务器的图片类型时可以直接写如：image/jpeg 、 image/png等的类型
+							intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+							startActivityForResult(intent,2);
+						}
+					}
+				});
 	}
 
 	@Override
@@ -358,7 +376,7 @@ public class SettingsFragment extends BaseHomeFragment implements
 	}
 
 	private void updateSex(int sex) {
-		User user = BmobUser.getCurrentUser(mContext, User.class);
+		User user = BmobUser.getCurrentUser(User.class);
 		if (user != null) {
 			if (sex == 0) {
 				user.setSex(Constant.SEX_FEMALE);
@@ -368,10 +386,10 @@ public class SettingsFragment extends BaseHomeFragment implements
 			if (mIProgressControllor != null) {
 				mIProgressControllor.showActionBarProgress();
 			}
-			user.update(mContext, new UpdateListener() {
+			user.update(new UpdateListener() {
 
 				@Override
-				public void onSuccess() {
+				public void done(BmobException e) {
 					// TODO Auto-generated method stub
 					if (mIProgressControllor != null) {
 						mIProgressControllor.hideActionBarProgress();
@@ -380,15 +398,25 @@ public class SettingsFragment extends BaseHomeFragment implements
 					LogUtils.i(TAG, "更新信息成功。");
 				}
 
-				@Override
-				public void onFailure(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					if (mIProgressControllor != null) {
-						mIProgressControllor.hideActionBarProgress();
-					}
-					ActivityUtil.show(getActivity(), "更新信息失败。请检查网络~");
-					LogUtils.i(TAG, "更新失败1-->" + arg1);
-				}
+//				@Override
+//				public void onSuccess() {
+//					// TODO Auto-generated method stub
+//					if (mIProgressControllor != null) {
+//						mIProgressControllor.hideActionBarProgress();
+//					}
+//					ActivityUtil.show(getActivity(), "更新信息成功。");
+//					LogUtils.i(TAG, "更新信息成功。");
+//				}
+//
+//				@Override
+//				public void onFailure(int arg0, String arg1) {
+//					// TODO Auto-generated method stub
+//					if (mIProgressControllor != null) {
+//						mIProgressControllor.hideActionBarProgress();
+//					}
+//					ActivityUtil.show(getActivity(), "更新信息失败。请检查网络~");
+//					LogUtils.i(TAG, "更新失败1-->" + arg1);
+//				}
 			});
 		} else {
 			redictToLogin(UPDATE_SEX);
@@ -444,6 +472,18 @@ public class SettingsFragment extends BaseHomeFragment implements
 				break;
 			case 3:
 				if (data != null) {
+//					try {
+//						Uri selectedImage = data.getData();
+//								String[] filePathColumn = new String[]{MediaStore.Images.Media.DATA};
+//						Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+//								cursor.moveToFirst();
+//						int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//						String picturePath = cursor.getString(columnIndex);
+//						cursor.close();
+//						updateIcon(picturePath);
+//					} catch ( Exception e) {
+//						LogUtils.e("异常--->",e+"");
+//					}
 					Bundle extras = data.getExtras();
 					if (extras != null) {
 						Bitmap bitmap = extras.getParcelable("data");
@@ -470,43 +510,8 @@ public class SettingsFragment extends BaseHomeFragment implements
 			if (mIProgressControllor != null) {
 				mIProgressControllor.showActionBarProgress();
 			}
-			file.upload(mContext, new UploadFileListener() {
 
-				@Override
-				public void onSuccess() {
-					// TODO Auto-generated method stub
-					if (mIProgressControllor != null) {
-						mIProgressControllor.hideActionBarProgress();
-					}
-					LogUtils.i(TAG, "上传文件成功。" + file.getFileUrl(mContext));
-					User currentUser = BmobUser.getCurrentUser(mContext,
-							User.class);
-					currentUser.setAvatar(file);
-					if (mIProgressControllor != null) {
-						mIProgressControllor.showActionBarProgress();
-					}
-					currentUser.update(mContext, new UpdateListener() {
-
-						@Override
-						public void onSuccess() {
-							// TODO Auto-generated method stub
-							if (mIProgressControllor != null) {
-								mIProgressControllor.hideActionBarProgress();
-							}
-							ActivityUtil.show(getActivity(), "更改头像成功。");
-						}
-
-						@Override
-						public void onFailure(int arg0, String arg1) {
-							// TODO Auto-generated method stub
-							if (mIProgressControllor != null) {
-								mIProgressControllor.hideActionBarProgress();
-							}
-							ActivityUtil.show(getActivity(), "更新头像失败。请检查网络~");
-							LogUtils.i(TAG, "更新失败2-->" + arg1);
-						}
-					});
-				}
+			file.uploadblock( new UploadFileListener() {
 
 				@Override
 				public void onProgress(Integer arg0) {
@@ -515,14 +520,31 @@ public class SettingsFragment extends BaseHomeFragment implements
 				}
 
 				@Override
-				public void onFailure(int arg0, String arg1) {
+				public void done(BmobException e) {
 					// TODO Auto-generated method stub
 					if (mIProgressControllor != null) {
 						mIProgressControllor.hideActionBarProgress();
 					}
-					ActivityUtil.show(getActivity(), "上传头像失败。请检查网络~");
-					LogUtils.i(TAG, "上传文件失败。" + arg1);
+//					LogUtils.i(TAG, "上传文件成功。" + file.getFileUrl());
+					User currentUser = BmobUser.getCurrentUser(
+							User.class);
+					currentUser.setAvatar(file);
+					if (mIProgressControllor != null) {
+						mIProgressControllor.showActionBarProgress();
+					}
+					currentUser.update( new UpdateListener() {
+
+						@Override
+						public void done(BmobException e) {
+							// TODO Auto-generated method stub
+							if (mIProgressControllor != null) {
+								mIProgressControllor.hideActionBarProgress();
+							}
+							ActivityUtil.show(getActivity(), "更改头像成功。");
+						}
+					});
 				}
+
 			});
 		}
 	}
@@ -530,8 +552,6 @@ public class SettingsFragment extends BaseHomeFragment implements
 	public void startPhotoZoom(Uri uri) {
 		Intent intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(uri, "image/*");
-		// 锟斤拷锟斤拷锟斤拷锟絚rop=true锟斤拷锟斤拷锟斤拷锟节匡拷锟斤拷锟斤拷Intent锟斤拷锟斤拷锟斤拷锟斤拷示锟斤拷VIEW锟缴裁硷拷
-		// aspectX aspectY 锟角匡拷叩谋锟斤拷锟�
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
 		// outputX outputY 锟角裁硷拷图片锟斤拷锟�
@@ -552,7 +572,7 @@ public class SettingsFragment extends BaseHomeFragment implements
 		File file = new File(files);
 		try {
 			FileOutputStream out = new FileOutputStream(file);
-			if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)) {
+			if (bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out)) {
 				out.flush();
 				out.close();
 			}

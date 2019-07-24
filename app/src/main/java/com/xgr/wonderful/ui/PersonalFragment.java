@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -106,7 +107,7 @@ public class PersonalFragment extends BaseHomeFragment implements
 		if (isCurrentUser(mUser)) {
 			personalTitle.setText("我发表过的");
 			goSettings.setVisibility(View.VISIBLE);
-			User user = BmobUser.getCurrentUser(mContext, User.class);
+			User user = BmobUser.getCurrentUser( User.class);
 			updatePersonalInfo(user);
 		} else {
 			goSettings.setVisibility(View.GONE);
@@ -179,7 +180,7 @@ public class PersonalFragment extends BaseHomeFragment implements
 		personalSign.setText(user.getSignature());
 		if (user.getAvatar() != null) {
 			ImageLoader.getInstance().displayImage(
-					user.getAvatar().getFileUrl(mContext),
+					user.getAvatar().getFileUrl(),
 					personalIcon,
 					MyApplication.getInstance().getOptions(
 							R.drawable.content_image_default),
@@ -204,7 +205,7 @@ public class PersonalFragment extends BaseHomeFragment implements
 	 */
 	private boolean isCurrentUser(User user) {
 		if (null != user) {
-			User cUser = BmobUser.getCurrentUser(mContext, User.class);
+			User cUser = BmobUser.getCurrentUser( User.class);
 			if (cUser != null && cUser.getObjectId().equals(user.getObjectId())) {
 				return true;
 			}
@@ -235,10 +236,10 @@ public class PersonalFragment extends BaseHomeFragment implements
 		query.order("-createdAt");
 		query.include("author");
 		query.addWhereEqualTo("author", mUser);
-		query.findObjects(mContext, new FindListener<QiangYu>() {
+		query.findObjects( new FindListener<QiangYu>() {
 
 			@Override
-			public void onSuccess(List<QiangYu> data) {
+			public void done(List<QiangYu> data, BmobException e) {
 				// TODO Auto-generated method stub
 				mIProgressControllor.hideActionBarProgress();
 				if (data.size() != 0 && data.get(data.size() - 1) != null) {
@@ -260,14 +261,37 @@ public class PersonalFragment extends BaseHomeFragment implements
 				}
 			}
 
-			@Override
-			public void onError(int arg0, String msg) {
-				// TODO Auto-generated method stub
-				mIProgressControllor.hideActionBarProgress();
-				LogUtils.i(TAG, "find failed." + msg);
-				pageNum--;
-				mPullToRefreshListView.onRefreshComplete();
-			}
+//			@Override
+//			public void onSuccess(List<QiangYu> data) {
+//				// TODO Auto-generated method stub
+//				mIProgressControllor.hideActionBarProgress();
+//				if (data.size() != 0 && data.get(data.size() - 1) != null) {
+//					if (mRefreshType == RefreshType.REFRESH) {
+//						mQiangYus.clear();
+//					}
+//
+//					if (data.size() < Constant.NUMBERS_PER_PAGE) {
+//						ActivityUtil.show(getActivity(), "已加载完所有数据~");
+//					}
+//
+//					mQiangYus.addAll(data);
+//					mAdapter.notifyDataSetChanged();
+//					mPullToRefreshListView.onRefreshComplete();
+//				} else {
+//					ActivityUtil.show(getActivity(), "暂无更多数据~");
+//					pageNum--;
+//					mPullToRefreshListView.onRefreshComplete();
+//				}
+//			}
+
+//			@Override
+//			public void onError(int arg0, String msg) {
+//				// TODO Auto-generated method stub
+//				mIProgressControllor.hideActionBarProgress();
+//				LogUtils.i(TAG, "find failed." + msg);
+//				pageNum--;
+//				mPullToRefreshListView.onRefreshComplete();
+//			}
 		});
 	}
 
@@ -328,7 +352,7 @@ public class PersonalFragment extends BaseHomeFragment implements
 	 */
 	private void getCurrentUserInfo() {
 		mIProgressControllor.showActionBarProgress();
-		User user = BmobUser.getCurrentUser(mContext, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		LogUtils.i(TAG, "sign:" + user.getSignature() + "sex:" + user.getSex());
 		updatePersonalInfo(user);
 		ActivityUtil.show(mContext, "更新信息成功。");

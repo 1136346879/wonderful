@@ -1,6 +1,7 @@
 package com.xgr.wonderful.ui;
 
 import android.Manifest;
+import cn.bmob.v3.helper.GsonUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import io.reactivex.functions.Consumer;
 import net.youmi.android.AdManager;
@@ -45,7 +46,6 @@ public class SplashActivity extends BaseActivity {
 			}
 			}
 		});
-
 	}
 
 	private void initview() {

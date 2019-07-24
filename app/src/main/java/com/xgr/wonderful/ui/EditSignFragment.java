@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import com.xgr.wonderful.R;
 import com.xgr.wonderful.entity.User;
@@ -68,24 +69,19 @@ public class EditSignFragment extends BaseHomeFragment{
 	}
 	
 	private void updateSign(String sign){
-		User user = BmobUser.getCurrentUser(mContext, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		if(user != null && sign != null){
 			user.setSignature(sign);
-			user.update(mContext, new UpdateListener() {
-				
+			user.update( new UpdateListener() {
+
 				@Override
-				public void onSuccess() {
+				public void done(BmobException e) {
 					// TODO Auto-generated method stub
 					ActivityUtil.show(getActivity(), "更改信息成功。");
 					getActivity().setResult(Activity.RESULT_OK);
 					getActivity().finish();
 				}
-				
-				@Override
-				public void onFailure(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					ActivityUtil.show(getActivity(), "更改信息失败。请检查网络");
-				}
+
 			});
 		}
 	}

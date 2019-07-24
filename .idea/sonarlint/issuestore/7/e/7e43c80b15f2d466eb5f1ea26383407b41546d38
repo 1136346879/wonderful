@@ -1,0 +1,26 @@
+
+[squid:S1155”">Use isEmpty() to check whether the collection is empty or not.(ÅŽÚ†ýÿÿÿÿ
+[squid:S1155Ú">Use isEmpty() to check whether the collection is empty or not.(ÅŽÚ†ýÿÿÿÿ
+ssquid:S1488Q"]Immediately return this expression instead of assigning it to the temporary variable "times".(ò¥•Z
+Gsquid:S1068A"0Remove this unused "pullFromUser" private field.(¬Ê°ö
+Vsquid:S1135¸"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ8ûÄ¢ÅÁ-
+Nsquid:S1135t"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+ysquid:S1450="]Remove the "actualListView" field and declare it as a local variable in the relevant methods.(ÑÝëÆúÿÿÿÿ
+csquid:CommentedOutCodeLinež"<This block of commented-out lines of code should be removed.(Øãµ¬
+Osquid:S1135"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+rsquid:S14506"[Remove the "currentIndex" field and declare it as a local variable in the relevant methods.( Ù¸„
+csquid:CommentedOutCodeLine¬"<This block of commented-out lines of code should be removed.(ÿ¿½˜
+[squid:S1155ë">Use isEmpty() to check whether the collection is empty or not.(ÅŽÚ†ýÿÿÿÿ
+Osquid:S1135‹"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Osquid:S1135‚"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+vsquid:S2293‘"YReplace the type specification in this constructor call with the diamond operator ("<>").(úîçÒûÿÿÿÿ
+Nsquid:S1135]"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+qsquid:S2293ª"YReplace the type specification in this constructor call with the diamond operator ("<>").(»¦ÐÃ
+Nsquid:S1135h"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135W"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Gsquid:S10686"0Remove this unused "currentIndex" private field.( Ù¸„
+Nsquid:S11350"2Complete the task associated to this TODO comment.(öË…æùÿÿÿÿ
+]squid:S1155º">Use isEmpty() to check whether the collection is empty or not.(ôšè½8ûÄ¢ÅÁ-
+>squid:S1185V"(Remove this method to simply inherit it.(¶±„
+psquid:S14505"ZRemove the "contentView" field and declare it as a local variable in the relevant methods.(íé÷b
+osquid:CommentedOutCodeLine¹"<This block of commented-out lines of code should be removed.(Ðè¹Öùÿÿÿÿ8Œ»šòÁ-

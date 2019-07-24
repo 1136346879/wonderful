@@ -4,9 +4,13 @@ import java.io.File;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobConfig;
 import cn.bmob.v3.BmobUser;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -21,10 +25,11 @@ import com.xgr.wonderful.entity.QiangYu;
 import com.xgr.wonderful.entity.User;
 import com.xgr.wonderful.utils.ActivityManagerUtils;
 
-public class MyApplication extends Application{
+public class MyApplication extends MultiDexApplication {
 
 	public static String TAG;
-	
+	public static String APPID = "de4c1e74c8949c9b0b91ba7017b7671e";
+
 	private static MyApplication myApplication = null;
 	
 	private QiangYu currentQiangYu = null;
@@ -33,7 +38,7 @@ public class MyApplication extends Application{
 		return myApplication;
 	}
 	public User getCurrentUser() {
-		User user = BmobUser.getCurrentUser(myApplication, User.class);
+		User user = BmobUser.getCurrentUser( User.class);
 		if(user!=null){
 			return user;
 		}
@@ -47,6 +52,27 @@ public class MyApplication extends Application{
 		//由于Application类本身已经单例，所以直接按以下处理即可。
 		myApplication = this;
 		initImageLoader();
+		/**
+		 * TODO 2.1、SDK初始化方式一
+		 */
+
+		Bmob.initialize(this, APPID);
+
+		/**
+		 * TODO 2.2、SDK初始化方式二
+		 * 设置BmobConfig，允许设置请求超时时间、文件分片上传时每片的大小、文件的过期时间
+		 */
+		BmobConfig config = new BmobConfig.Builder(this)
+				//设置APPID
+				.setApplicationId(APPID)
+				//请求超时时间（单位为秒）：默认15s
+				.setConnectTimeout(30)
+				//文件分片上传时每片的大小（单位字节），默认512*1024
+				.setUploadBlockSize(1024 * 1024)
+				//文件的过期时间(单位为秒)：默认1800s
+				.setFileExpiration(5500)
+				.build();
+		Bmob.initialize(config);
 	}
 
 	
@@ -96,5 +122,11 @@ public class MyApplication extends Application{
 		.imageScaleType(ImageScaleType.EXACTLY)
 		.bitmapConfig(Bitmap.Config.RGB_565)
 		.build();
+	}
+
+	@Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		MultiDex.install(this);
 	}
 }

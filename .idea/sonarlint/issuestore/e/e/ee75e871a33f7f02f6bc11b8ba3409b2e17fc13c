@@ -1,0 +1,19 @@
+
+osquid:S1450!"XRemove the "rightMenu" field and declare it as a local variable in the relevant methods.(ÍøºØ
+Nsquid:S1135&"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+nsquid:S1450 "WRemove the "leftMenu" field and declare it as a local variable in the relevant methods.(·´ôó
+gsquid:CommentedOutCodeLine/"<This block of commented-out lines of code should be removed.(þ¡ÿÞÿÿÿÿÿ
+Usquid:UselessImportCheck",Remove this unused import 'cn.bmob.v3.Bmob'.(Œ¸«æýÿÿÿÿ
+Nsquid:S1135;"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+csquid:CommentedOutCodeLine€"<This block of commented-out lines of code should be removed.(ÎÄ¾
+Ysquid:UnusedPrivateMethod4"/Remove this unused private "showDialog" method.(Ò»ß¸úÿÿÿÿ
+Ssquid:S2696¡"6Make the enclosing method "static" or remove this set.(Óô½îùÿÿÿÿ
+Nsquid:S1135k"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Hsquid:S1481Y",Remove this unused "mBundle" local variable.(„Îíáüÿÿÿÿ
+wsquid:S1450"[Remove the "naviFragment" field and declare it as a local variable in the relevant methods.(†î®ìýÿÿÿÿ
+squid:S1186]"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Æôýëùÿÿÿÿ
+squid:S1186d"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(÷™ÞÕüÿÿÿÿ
+asquid:UselessImportCheck"=Remove this unused import 'com.xgr.wonderful.utils.Constant'.(›žËç
+Osquid:S1135Ž"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135C"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Osquid:S1135š"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
