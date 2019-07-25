@@ -23,9 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.*;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
@@ -63,8 +61,9 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
 	ImageView takePic;
 	// Button commitButton;
 	String dateTime;
+    private RelativeLayout llPub;
 
-	@Override
+    @Override
 	protected void setLayoutView() {
 		// TODO Auto-generated method stub
 		setContentView(R.layout.activity_edit);
@@ -118,7 +117,7 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
 					return;
 				}
 //				if (targeturl == null) {
-					publishWithoutFigure(commitContent, null);
+					publishWithoutFigure(commitContent, null,targeturl);
 //				} else {
 //					publish(commitContent);
 //				}
@@ -234,9 +233,8 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
             @Override
             public void done(BmobException e) {
                 // TODO Auto-generated method stub
-                LogUtils.i(TAG,
-                        "上传文件成功。" + figureFile.getFileUrl());
-                publishWithoutFigure(commitContent, figureFile);
+               Toast.makeText(EditActivity.this, "上传文件成功。" ,1).show();
+                publishWithoutFigure(commitContent, figureFile,targeturl);
             }
 
 		});
@@ -244,12 +242,17 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
 	}
 
 	private void publishWithoutFigure(final String commitContent,
-			final BmobFile figureFile) {
+			final BmobFile figureFile,String targeturl) {
 		User user = BmobUser.getCurrentUser( User.class);
 
 		final QiangYu qiangYu = new QiangYu();
 		qiangYu.setAuthor(user);
-		qiangYu.setContent(commitContent);
+		if(targeturl ==null){
+			qiangYu.setContent(commitContent);
+		}else{
+			qiangYu.setContent(commitContent+"逼"+targeturl);
+		}
+
 		if (figureFile != null) {
 			qiangYu.setContentfigureurl(figureFile);
 		}

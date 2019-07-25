@@ -36,6 +36,7 @@ import com.xgr.wonderful.adapter.AIContentAdapter;
 import com.xgr.wonderful.db.DatabaseUtil;
 import com.xgr.wonderful.entity.QiangYu;
 import com.xgr.wonderful.ui.base.BaseFragment;
+import com.xgr.wonderful.utils.ACache;
 import com.xgr.wonderful.utils.ActivityUtil;
 import com.xgr.wonderful.utils.Constant;
 import com.xgr.wonderful.utils.LogUtils;
@@ -63,6 +64,8 @@ public class QiangContentFragment extends BaseFragment{
 	private TextView networkTips;
 	private ProgressBar progressbar;
 	private boolean pullFromUser;
+	private ACache mCache;
+
 	public enum RefreshType{
 		REFRESH,LOAD_MORE
 	}
@@ -93,6 +96,7 @@ public class QiangContentFragment extends BaseFragment{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		currentIndex = getArguments().getInt("page");
+		mCache = ACache.get(getActivity());
 		pageNum = 0;
 		lastItemTime = getCurrentTime();
 		LogUtils.i(TAG,"curent time:"+lastItemTime);

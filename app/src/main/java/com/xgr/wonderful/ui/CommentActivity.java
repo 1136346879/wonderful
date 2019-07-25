@@ -47,9 +47,7 @@ import com.xgr.wonderful.entity.User;
 import com.xgr.wonderful.sns.TencentShare;
 import com.xgr.wonderful.sns.TencentShareEntity;
 import com.xgr.wonderful.ui.base.BasePageActivity;
-import com.xgr.wonderful.utils.ActivityUtil;
-import com.xgr.wonderful.utils.Constant;
-import com.xgr.wonderful.utils.LogUtils;
+import com.xgr.wonderful.utils.*;
 
 /**
  * @author kingofglory email: kingofglory@yeah.net blog: http:www.google.com
@@ -85,6 +83,7 @@ public class CommentActivity extends BasePageActivity implements
 	private List<Comment> comments = new ArrayList<Comment>();
 
 	private int pageNum;
+	private ACache mCache;
 
 	@Override
 	protected void setLayoutView() {
@@ -95,6 +94,7 @@ public class CommentActivity extends BasePageActivity implements
 	@Override
 	protected void findViews() {
 		// TODO Auto-generated method stub
+		mCache = ACache.get(this);
 		actionbar = (ActionBar) findViewById(R.id.actionbar_comment);
 		commentList = (ListView) findViewById(R.id.comment_list);
 		footer = (TextView) findViewById(R.id.loadmore);
@@ -168,37 +168,51 @@ public class CommentActivity extends BasePageActivity implements
 			return;
 		}
 		userName.setText(qiangYu.getAuthor().getUsername());
-		commentItemContent.setText(qiangYu.getContent());
-		if (null == qiangYu.getContentfigureurl()) {
-			commentItemImage.setVisibility(View.GONE);
-		} else {
-			commentItemImage.setVisibility(View.VISIBLE);
-			ImageLoader.getInstance().displayImage(
-					qiangYu.getContentfigureurl().getFileUrl(
-							) == null ? "" : qiangYu
-							.getContentfigureurl().getFileUrl(
-									),
-					commentItemImage,
-					MyApplication.getInstance().getOptions(
-							R.drawable.bg_pic_loading),
-					new SimpleImageLoadingListener() {
-
-						@Override
-						public void onLoadingComplete(String imageUri,
-								View view, Bitmap loadedImage) {
-							// TODO Auto-generated method stub
-							super.onLoadingComplete(imageUri, view, loadedImage);
-							float[] cons = ActivityUtil.getBitmapConfiguration(
-									loadedImage, commentItemImage, 1.0f);
-							RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-									(int) cons[0], (int) cons[1]);
-							layoutParams.addRule(RelativeLayout.BELOW,
-									R.id.content_text);
-							commentItemImage.setLayoutParams(layoutParams);
-						}
-
-					});
+		if(qiangYu.getContent().contains("逼")) {
+			commentItemContent.setText(qiangYu.getContent().substring(0, qiangYu.getContent().lastIndexOf("逼")));
+		}else{
+			commentItemContent.setText(qiangYu.getContent());
 		}
+		if(qiangYu.getContent().contains("逼")){
+			String iconurl2 = qiangYu.getContent().substring(qiangYu.getContent().lastIndexOf("逼")+1);
+			/*为什么图片一定要转化为 Bitmap格式的！！ */
+			Bitmap bitmap2 = CacheUtils.getLoacalBitmap(iconurl2); //从本地取图片(在cdcard中获取)  //
+			commentItemImage .setImageBitmap(bitmap2); //设置Bitmap
+			commentItemImage.setVisibility(View.VISIBLE);
+		}else{
+			commentItemImage.setVisibility(View.GONE);
+		}
+
+//		if (null == qiangYu.getContentfigureurl()) {
+//			commentItemImage.setVisibility(View.GONE);
+//		} else {
+
+//			ImageLoader.getInstance().displayImage(
+//					qiangYu.getContentfigureurl().getFileUrl(
+//							) == null ? "" : qiangYu
+//							.getContentfigureurl().getFileUrl(
+//									),
+//					commentItemImage,
+//					MyApplication.getInstance().getOptions(
+//							R.drawable.bg_pic_loading),
+//					new SimpleImageLoadingListener() {
+//
+//						@Override
+//						public void onLoadingComplete(String imageUri,
+//								View view, Bitmap loadedImage) {
+//							// TODO Auto-generated method stub
+//							super.onLoadingComplete(imageUri, view, loadedImage);
+//							float[] cons = ActivityUtil.getBitmapConfiguration(
+//									loadedImage, commentItemImage, 1.0f);
+//							RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+//									(int) cons[0], (int) cons[1]);
+//							layoutParams.addRule(RelativeLayout.BELOW,
+//									R.id.content_text);
+//							commentItemImage.setLayoutParams(layoutParams);
+//						}
+//
+//					});
+//		}
 
 		love.setText(qiangYu.getLove() + "");
 		if (qiangYu.getMyLove()) {
@@ -214,25 +228,29 @@ public class CommentActivity extends BasePageActivity implements
 		}
 
 		User user = qiangYu.getAuthor();
-		BmobFile avatar = user.getAvatar();
-		if (null != avatar) {
-			ImageLoader.getInstance().displayImage(
-					avatar.getFileUrl(),
-					userLogo,
-					MyApplication.getInstance().getOptions(
-							R.drawable.content_image_default),
-					new SimpleImageLoadingListener() {
+		if(mCache.getAsString("iconUrl")!= null){
 
-						@Override
-						public void onLoadingComplete(String imageUri,
-								View view, Bitmap loadedImage) {
-							// TODO Auto-generated method stub
-							super.onLoadingComplete(imageUri, view, loadedImage);
-							LogUtils.i(TAG, "load personal icon completed.");
-						}
-
-					});
-		}
+		userLogo.setImageBitmap(CacheUtils.getLoacalBitmap(mCache.getAsString("iconUrl")));
+        }
+//		BmobFile avatar = user.getAvatar();
+//		if (null != avatar) {
+//			ImageLoader.getInstance().displayImage(
+//					avatar.getFileUrl(),
+//					userLogo,
+//					MyApplication.getInstance().getOptions(
+//							R.drawable.content_image_default),
+//					new SimpleImageLoadingListener() {
+//
+//						@Override
+//						public void onLoadingComplete(String imageUri,
+//								View view, Bitmap loadedImage) {
+//							// TODO Auto-generated method stub
+//							super.onLoadingComplete(imageUri, view, loadedImage);
+//							LogUtils.i(TAG, "load personal icon completed.");
+//						}
+//
+//					});
+//		}
 	}
 
 	@Override

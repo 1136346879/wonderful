@@ -2,10 +2,14 @@ package com.xgr.wonderful.utils;
 
 import static android.os.Environment.MEDIA_MOUNTED;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
@@ -69,5 +73,19 @@ public class CacheUtils {
         int perm = context.checkCallingOrSelfPermission(EXTERNAL_STORAGE_PERMISSION);
         return perm == PackageManager.PERMISSION_GRANTED;
     }
-    
+    /**
+     * 加载本地图片
+     * @param url
+     * @return
+     */
+    public static Bitmap getLoacalBitmap(String url) {
+        try {
+            FileInputStream fis = new FileInputStream(url);
+            return BitmapFactory.decodeStream(fis);  ///把流转化为Bitmap图片
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

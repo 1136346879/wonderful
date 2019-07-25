@@ -33,233 +33,238 @@ import com.xgr.wonderful.adapter.PersonCenterContentAdapter;
 import com.xgr.wonderful.entity.QiangYu;
 import com.xgr.wonderful.entity.User;
 import com.xgr.wonderful.ui.base.BaseHomeFragment;
-import com.xgr.wonderful.utils.ActivityUtil;
-import com.xgr.wonderful.utils.Constant;
-import com.xgr.wonderful.utils.LogUtils;
+import com.xgr.wonderful.utils.*;
 
 public class PersonalFragment extends BaseHomeFragment implements
-		OnClickListener {
+        OnClickListener {
 
-	private ImageView personalIcon;
-	private TextView personalName;
-	private TextView personalSign;
+    private ImageView personalIcon;
+    private TextView personalName;
+    private TextView personalSign;
 
-	private ImageView goSettings;
+    private ImageView goSettings;
 
-	private TextView personalTitle;
-	private PullToRefreshListView mPullToRefreshListView;
-	private ListView mListView;
+    private TextView personalTitle;
+    private PullToRefreshListView mPullToRefreshListView;
+    private ListView mListView;
 
-	private ArrayList<QiangYu> mQiangYus;
-	private PersonCenterContentAdapter mAdapter;
+    private ArrayList<QiangYu> mQiangYus;
+    private PersonCenterContentAdapter mAdapter;
 
-	private User mUser;
+    private User mUser;
 
-	private int pageNum;
+    private int pageNum;
 
-	public static final int EDIT_USER = 1;
+    public static final int EDIT_USER = 1;
+    private ACache mCache;
 
-	public enum RefreshType {
-		REFRESH, LOAD_MORE
-	}
 
-	private RefreshType mRefreshType = RefreshType.LOAD_MORE;
+    public enum RefreshType {
+        REFRESH, LOAD_MORE
+    }
 
-	public static PersonalFragment newInstance() {
-		PersonalFragment fragment = new PersonalFragment();
-		return fragment;
-	}
+    private RefreshType mRefreshType = RefreshType.LOAD_MORE;
 
-	@Override
-	protected int getLayoutId() {
-		// TODO Auto-generated method stub
-		return R.layout.fragment_personal;
-	}
+    public static PersonalFragment newInstance() {
+        PersonalFragment fragment = new PersonalFragment();
+        return fragment;
+    }
 
-	@Override
-	protected void findViews(View view) {
-		// TODO Auto-generated method stub
-		personalIcon = (ImageView) view.findViewById(R.id.personal_icon);
-		personalName = (TextView) view.findViewById(R.id.personl_name);
-		personalSign = (TextView) view.findViewById(R.id.personl_signature);
+    @Override
+    protected int getLayoutId() {
+        // TODO Auto-generated method stub
+        return R.layout.fragment_personal;
+    }
 
-		goSettings = (ImageView) view.findViewById(R.id.go_settings);
+    @Override
+    protected void findViews(View view) {
+        // TODO Auto-generated method stub
+        personalIcon = (ImageView) view.findViewById(R.id.personal_icon);
+        personalName = (TextView) view.findViewById(R.id.personl_name);
+        personalSign = (TextView) view.findViewById(R.id.personl_signature);
 
-		personalTitle = (TextView) view.findViewById(R.id.personl_title);
+        goSettings = (ImageView) view.findViewById(R.id.go_settings);
 
-		mPullToRefreshListView = (PullToRefreshListView) view
-				.findViewById(R.id.pull_refresh_list_personal);
-	}
+        personalTitle = (TextView) view.findViewById(R.id.personl_title);
 
-	@Override
-	protected void setupViews(Bundle bundle) {
-		// TODO Auto-generated method stub
-		mUser = MyApplication.getInstance().getCurrentQiangYu().getAuthor();
+        mPullToRefreshListView = (PullToRefreshListView) view
+                .findViewById(R.id.pull_refresh_list_personal);
+    }
 
-		updatePersonalInfo(mUser);
+    @Override
+    protected void setupViews(Bundle bundle) {
+        // TODO Auto-generated method stub
+        mUser = MyApplication.getInstance().getCurrentQiangYu().getAuthor();
 
-		initMyPublish();
+        mCache = ACache.get(getActivity());
+        updatePersonalInfo(mUser);
+        initMyPublish();
 
-	}
+    }
 
-	private void initMyPublish() {
+    private void initMyPublish() {
 
-		if (isCurrentUser(mUser)) {
-			personalTitle.setText("我发表过的");
-			goSettings.setVisibility(View.VISIBLE);
-			User user = BmobUser.getCurrentUser( User.class);
-			updatePersonalInfo(user);
-		} else {
-			goSettings.setVisibility(View.GONE);
-			if (mUser != null && mUser.getSex().equals(Constant.SEX_FEMALE)) {
-				personalTitle.setText("她发表过的");
-			} else if (mUser != null
-					&& mUser.getSex().equals(Constant.SEX_MALE)) {
-				personalTitle.setText("他发表过的");
-			}
-		}
+        if (isCurrentUser(mUser)) {
+            personalTitle.setText("我发表过的");
+            goSettings.setVisibility(View.VISIBLE);
+            User user = BmobUser.getCurrentUser(User.class);
+            updatePersonalInfo(user);
+        } else {
+            goSettings.setVisibility(View.GONE);
+            if (mUser != null && mUser.getSex().equals(Constant.SEX_FEMALE)) {
+                personalTitle.setText("她发表过的");
+            } else if (mUser != null
+                    && mUser.getSex().equals(Constant.SEX_MALE)) {
+                personalTitle.setText("他发表过的");
+            }
+        }
 
-		mPullToRefreshListView.setMode(Mode.BOTH);
-		mPullToRefreshListView
-				.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+        mPullToRefreshListView.setMode(Mode.BOTH);
+        mPullToRefreshListView
+                .setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
-					@Override
-					public void onPullDownToRefresh(
-							PullToRefreshBase<ListView> refreshView) {
-						// TODO Auto-generated method stub
-						String label = DateUtils.formatDateTime(getActivity(),
-								System.currentTimeMillis(),
-								DateUtils.FORMAT_SHOW_TIME
-										| DateUtils.FORMAT_SHOW_DATE
-										| DateUtils.FORMAT_ABBREV_ALL);
-						refreshView.getLoadingLayoutProxy()
-								.setLastUpdatedLabel(label);
-						mRefreshType = RefreshType.REFRESH;
-						pageNum = 0;
-						fetchData();
-					}
+                    @Override
+                    public void onPullDownToRefresh(
+                            PullToRefreshBase<ListView> refreshView) {
+                        // TODO Auto-generated method stub
+                        String label = DateUtils.formatDateTime(getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        refreshView.getLoadingLayoutProxy()
+                                .setLastUpdatedLabel(label);
+                        mRefreshType = RefreshType.REFRESH;
+                        pageNum = 0;
+                        fetchData();
+                    }
 
-					@Override
-					public void onPullUpToRefresh(
-							PullToRefreshBase<ListView> refreshView) {
-						// TODO Auto-generated method stub
-						mRefreshType = RefreshType.LOAD_MORE;
-						fetchData();
-					}
-				});
-		mPullToRefreshListView
-				.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+                    @Override
+                    public void onPullUpToRefresh(
+                            PullToRefreshBase<ListView> refreshView) {
+                        // TODO Auto-generated method stub
+                        mRefreshType = RefreshType.LOAD_MORE;
+                        fetchData();
+                    }
+                });
+        mPullToRefreshListView
+                .setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
 
-					@Override
-					public void onLastItemVisible() {
-						// TODO Auto-generated method stub
+                    @Override
+                    public void onLastItemVisible() {
+                        // TODO Auto-generated method stub
 
-					}
-				});
-		mListView = mPullToRefreshListView.getRefreshableView();
-		mQiangYus = new ArrayList<QiangYu>();
-		mAdapter = new PersonCenterContentAdapter(mContext, mQiangYus);
-		mListView.setAdapter(mAdapter);
-		mListView.setOnItemClickListener(new OnItemClickListener() {
+                    }
+                });
+        mListView = mPullToRefreshListView.getRefreshableView();
+        mQiangYus = new ArrayList<QiangYu>();
+        mAdapter = new PersonCenterContentAdapter(mContext, mQiangYus);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				// MyApplication.getInstance().setCurrentQiangYu(mQiangYus.get(position-1));
-				Intent intent = new Intent();
-				intent.setClass(getActivity(), CommentActivity.class);
-				intent.putExtra("data", mQiangYus.get(position - 1));
-				startActivity(intent);
-			}
-		});
-	}
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO Auto-generated method stub
+                // MyApplication.getInstance().setCurrentQiangYu(mQiangYus.get(position-1));
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), CommentActivity.class);
+                intent.putExtra("data", mQiangYus.get(position - 1));
+                startActivity(intent);
+            }
+        });
+    }
 
-	private void updatePersonalInfo(User user) {
-		personalName.setText(user.getUsername());
-		personalSign.setText(user.getSignature());
-		if (user.getAvatar() != null) {
-			ImageLoader.getInstance().displayImage(
-					user.getAvatar().getFileUrl(),
-					personalIcon,
-					MyApplication.getInstance().getOptions(
-							R.drawable.content_image_default),
-					new SimpleImageLoadingListener() {
+    private void updatePersonalInfo(User user) {
+        personalName.setText(user.getUsername());
+        personalSign.setText(user.getSignature());
+        if (mCache.getAsString("iconUrl") != null) {
 
-						@Override
-						public void onLoadingComplete(String imageUri,
-								View view, Bitmap loadedImage) {
-							// TODO Auto-generated method stub
-							super.onLoadingComplete(imageUri, view, loadedImage);
-							LogUtils.i(TAG, "load personal icon completed.");
-						}
 
-					});
-		}
-	}
+            personalIcon.setImageBitmap(CacheUtils.getLoacalBitmap(mCache.getAsString("iconUrl")));
+        }
+        if (user.getAvatar() != null) {
+            ImageLoader.getInstance().displayImage(
+                    user.getAvatar().getFileUrl(),
+                    personalIcon,
+                    MyApplication.getInstance().getOptions(
+                            R.drawable.content_image_default),
+                    new SimpleImageLoadingListener() {
 
-	/**
-	 * 判断点击条目的用户是否是当前登录用户
-	 * 
-	 * @return
-	 */
-	private boolean isCurrentUser(User user) {
-		if (null != user) {
-			User cUser = BmobUser.getCurrentUser( User.class);
-			if (cUser != null && cUser.getObjectId().equals(user.getObjectId())) {
-				return true;
-			}
-		}
-		return false;
-	}
+                        @Override
+                        public void onLoadingComplete(String imageUri,
+                                                      View view, Bitmap loadedImage) {
+                            // TODO Auto-generated method stub
+                            super.onLoadingComplete(imageUri, view, loadedImage);
+                            LogUtils.i(TAG, "load personal icon completed.");
+                        }
 
-	@Override
-	protected void setListener() {
-		// TODO Auto-generated method stub
-		personalIcon.setOnClickListener(this);
-		personalSign.setOnClickListener(this);
-		personalTitle.setOnClickListener(this);
-		goSettings.setOnClickListener(this);
-	}
+                    });
+        }
+    }
 
-	@Override
-	protected void fetchData() {
-		// TODO Auto-generated method stub
-		getPublishion();
-	}
+    /**
+     * 判断点击条目的用户是否是当前登录用户
+     *
+     * @return
+     */
+    private boolean isCurrentUser(User user) {
+        if (null != user) {
+            User cUser = BmobUser.getCurrentUser(User.class);
+            if (cUser != null && cUser.getObjectId().equals(user.getObjectId())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private void getPublishion() {
-		mIProgressControllor.showActionBarProgress();
-		BmobQuery<QiangYu> query = new BmobQuery<QiangYu>();
-		query.setLimit(Constant.NUMBERS_PER_PAGE);
-		query.setSkip(Constant.NUMBERS_PER_PAGE * (pageNum++));
-		query.order("-createdAt");
-		query.include("author");
-		query.addWhereEqualTo("author", mUser);
-		query.findObjects( new FindListener<QiangYu>() {
+    @Override
+    protected void setListener() {
+        // TODO Auto-generated method stub
+        personalIcon.setOnClickListener(this);
+        personalSign.setOnClickListener(this);
+        personalTitle.setOnClickListener(this);
+        goSettings.setOnClickListener(this);
+    }
 
-			@Override
-			public void done(List<QiangYu> data, BmobException e) {
-				// TODO Auto-generated method stub
-				mIProgressControllor.hideActionBarProgress();
-				if (data.size() != 0 && data.get(data.size() - 1) != null) {
-					if (mRefreshType == RefreshType.REFRESH) {
-						mQiangYus.clear();
-					}
+    @Override
+    protected void fetchData() {
+        // TODO Auto-generated method stub
+        getPublishion();
+    }
 
-					if (data.size() < Constant.NUMBERS_PER_PAGE) {
-						ActivityUtil.show(getActivity(), "已加载完所有数据~");
-					}
+    private void getPublishion() {
+        mIProgressControllor.showActionBarProgress();
+        BmobQuery<QiangYu> query = new BmobQuery<QiangYu>();
+        query.setLimit(Constant.NUMBERS_PER_PAGE);
+        query.setSkip(Constant.NUMBERS_PER_PAGE * (pageNum++));
+        query.order("-createdAt");
+        query.include("author");
+        query.addWhereEqualTo("author", mUser);
+        query.findObjects(new FindListener<QiangYu>() {
 
-					mQiangYus.addAll(data);
-					mAdapter.notifyDataSetChanged();
-					mPullToRefreshListView.onRefreshComplete();
-				} else {
-					ActivityUtil.show(getActivity(), "暂无更多数据~");
-					pageNum--;
-					mPullToRefreshListView.onRefreshComplete();
-				}
-			}
+            @Override
+            public void done(List<QiangYu> data, BmobException e) {
+                // TODO Auto-generated method stub
+                mIProgressControllor.hideActionBarProgress();
+                if (data.size() != 0 && data.get(data.size() - 1) != null) {
+                    if (mRefreshType == RefreshType.REFRESH) {
+                        mQiangYus.clear();
+                    }
+
+                    if (data.size() < Constant.NUMBERS_PER_PAGE) {
+                        ActivityUtil.show(getActivity(), "已加载完所有数据~");
+                    }
+
+                    mQiangYus.addAll(data);
+                    mAdapter.notifyDataSetChanged();
+                    mPullToRefreshListView.onRefreshComplete();
+                } else {
+                    ActivityUtil.show(getActivity(), "暂无更多数据~");
+                    pageNum--;
+                    mPullToRefreshListView.onRefreshComplete();
+                }
+            }
 
 //			@Override
 //			public void onSuccess(List<QiangYu> data) {
@@ -292,79 +297,79 @@ public class PersonalFragment extends BaseHomeFragment implements
 //				pageNum--;
 //				mPullToRefreshListView.onRefreshComplete();
 //			}
-		});
-	}
+        });
+    }
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		switch (v.getId()) {
-		case R.id.personal_icon:
-		case R.id.personl_signature:
-		case R.id.go_settings:
-			if (isCurrentUser(mUser)) {
-				Intent intent = new Intent();
-				intent.setClass(mContext, SettingsActivity.class);
-				startActivityForResult(intent, EDIT_USER);
-				LogUtils.i(TAG, "current user edit...");
-			}
-			break;
-		case R.id.personl_title:
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        switch (v.getId()) {
+            case R.id.personal_icon:
+            case R.id.personl_signature:
+            case R.id.go_settings:
+                if (isCurrentUser(mUser)) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, SettingsActivity.class);
+                    startActivityForResult(intent, EDIT_USER);
+                    LogUtils.i(TAG, "current user edit...");
+                }
+                break;
+            case R.id.personl_title:
 
-			break;
-		default:
-			break;
-		}
-	}
+                break;
+            default:
+                break;
+        }
+    }
 
-	@Override
-	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
-		super.onAttach(activity);
-		try {
-			mIProgressControllor = (IProgressControllor) activity;
-		} catch (ClassCastException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void onAttach(Activity activity) {
+        // TODO Auto-generated method stub
+        super.onAttach(activity);
+        try {
+            mIProgressControllor = (IProgressControllor) activity;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == Activity.RESULT_OK) {
-			switch (requestCode) {
-			case EDIT_USER:
-				getCurrentUserInfo();
-				pageNum = 0;
-				mRefreshType = RefreshType.REFRESH;
-				getPublishion();
-				break;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case EDIT_USER:
+                    getCurrentUserInfo();
+                    pageNum = 0;
+                    mRefreshType = RefreshType.REFRESH;
+                    getPublishion();
+                    break;
 
-			default:
-				break;
-			}
-		}
-	}
+                default:
+                    break;
+            }
+        }
+    }
 
-	/**
-	 * 查询当前用户具体信息
-	 */
-	private void getCurrentUserInfo() {
-		mIProgressControllor.showActionBarProgress();
-		User user = BmobUser.getCurrentUser( User.class);
-		LogUtils.i(TAG, "sign:" + user.getSignature() + "sex:" + user.getSex());
-		updatePersonalInfo(user);
-		ActivityUtil.show(mContext, "更新信息成功。");
-		mIProgressControllor.hideActionBarProgress();
-	}
+    /**
+     * 查询当前用户具体信息
+     */
+    private void getCurrentUserInfo() {
+        mIProgressControllor.showActionBarProgress();
+        User user = BmobUser.getCurrentUser(User.class);
+        LogUtils.i(TAG, "sign:" + user.getSignature() + "sex:" + user.getSex());
+        updatePersonalInfo(user);
+        ActivityUtil.show(mContext, "更新信息成功。");
+        mIProgressControllor.hideActionBarProgress();
+    }
 
-	public interface IProgressControllor {
-		void showActionBarProgress();
+    public interface IProgressControllor {
+        void showActionBarProgress();
 
-		void hideActionBarProgress();
-	}
+        void hideActionBarProgress();
+    }
 
-	private IProgressControllor mIProgressControllor;
+    private IProgressControllor mIProgressControllor;
 
 }

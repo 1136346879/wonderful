@@ -1,9 +1,6 @@
 package com.xgr.wonderful.ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Date;
 
 import android.Manifest;
@@ -12,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -46,10 +44,7 @@ import com.xgr.wonderful.R;
 import com.xgr.wonderful.entity.User;
 import com.xgr.wonderful.ui.PersonalFragment.IProgressControllor;
 import com.xgr.wonderful.ui.base.BaseHomeFragment;
-import com.xgr.wonderful.utils.ActivityUtil;
-import com.xgr.wonderful.utils.CacheUtils;
-import com.xgr.wonderful.utils.Constant;
-import com.xgr.wonderful.utils.LogUtils;
+import com.xgr.wonderful.utils.*;
 import io.reactivex.functions.Consumer;
 
 public class SettingsFragment extends BaseHomeFragment implements
@@ -77,6 +72,7 @@ public class SettingsFragment extends BaseHomeFragment implements
 	static final int GO_LOGIN = 13;
 	static final int UPDATE_SIGN = 14;
 	static final int EDIT_SIGN = 15;
+	private ACache mCache;
 
 	public static SettingsFragment newInstance() {
 		SettingsFragment fragment = new SettingsFragment();
@@ -91,6 +87,7 @@ public class SettingsFragment extends BaseHomeFragment implements
 
 	@Override
 	protected void findViews(View view) {
+		mCache = ACache.get(getActivity());
 		// TODO Auto-generated method stub
 		logout = (TextView) view.findViewById(R.id.user_logout);
 		update = (RelativeLayout) view.findViewById(R.id.settings_update);
@@ -126,10 +123,17 @@ public class SettingsFragment extends BaseHomeFragment implements
 				sexSwitch.setChecked(false);
 				sputil.setValue("sex_settings", 1);
 			}
+			String iconurl = mCache.getAsString("iconUrl");
+			if(iconurl!= null){
+                /*为什么图片一定要转化为 Bitmap格式的！！ */
+                Bitmap bitmap = CacheUtils.getLoacalBitmap(iconurl); //从本地取图片(在cdcard中获取)  //
+                userIcon .setImageBitmap(bitmap); //设置Bitmap
+            }
+
 			BmobFile avatarFile = user.getAvatar();
 			if (null != avatarFile) {
 				ImageLoader.getInstance().displayImage(
-						avatarFile.getFileUrl(),
+						iconurl,
 						userIcon,
 						MyApplication.getInstance().getOptions(
 								R.drawable.user_icon_default_main),
@@ -150,6 +154,8 @@ public class SettingsFragment extends BaseHomeFragment implements
 			logout.setText("登录");
 		}
 	}
+
+
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -490,6 +496,7 @@ public class SettingsFragment extends BaseHomeFragment implements
 						// 锟斤拷锟斤拷图片
 						iconUrl = saveToSdCard(bitmap);
 						userIcon.setImageBitmap(bitmap);
+						mCache.put("iconUrl",iconUrl,7*24*60*60);
 						updateIcon(iconUrl);
 					}
 				}

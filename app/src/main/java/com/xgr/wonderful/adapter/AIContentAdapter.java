@@ -32,9 +32,7 @@ import com.xgr.wonderful.sns.TencentShareEntity;
 import com.xgr.wonderful.ui.CommentActivity;
 import com.xgr.wonderful.ui.PersonalActivity;
 import com.xgr.wonderful.ui.RegisterAndLoginActivity;
-import com.xgr.wonderful.utils.ActivityUtil;
-import com.xgr.wonderful.utils.Constant;
-import com.xgr.wonderful.utils.LogUtils;
+import com.xgr.wonderful.utils.*;
 
 /**
  * @author kingofglory email: kingofglory@yeah.net blog: http:www.google.com
@@ -45,9 +43,11 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 
 	public static final String TAG = "AIContentAdapter";
 	public static final int SAVE_FAVOURITE = 2;
+	private final ACache mCache;
 
 	public AIContentAdapter(Context context, List<QiangYu> list) {
 		super(context, list);
+		mCache = ACache.get(context);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -93,21 +93,28 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 		if (user.getAvatar() != null) {
 			avatarUrl = user.getAvatar().getFileUrl();
 		}
-		ImageLoader.getInstance().displayImage(
-				avatarUrl,
-				viewHolder.userLogo,
-				MyApplication.getInstance().getOptions(
-						R.drawable.user_icon_default_main),
-				new SimpleImageLoadingListener() {
+		String iconurl = mCache.getAsString("iconUrl");
+		if(iconurl != null){
+			/*为什么图片一定要转化为 Bitmap格式的！！ */
+			Bitmap bitmap = CacheUtils.getLoacalBitmap(iconurl); //从本地取图片(在cdcard中获取)  //
+			viewHolder.userLogo .setImageBitmap(bitmap); //设置Bitmap
+		}
 
-					@Override
-					public void onLoadingComplete(String imageUri, View view,
-							Bitmap loadedImage) {
-						// TODO Auto-generated method stub
-						super.onLoadingComplete(imageUri, view, loadedImage);
-					}
-
-				});
+//		ImageLoader.getInstance().displayImage(
+//				avatarUrl,
+//				viewHolder.userLogo,
+//				MyApplication.getInstance().getOptions(
+//						R.drawable.user_icon_default_main),
+//				new SimpleImageLoadingListener() {
+//
+//					@Override
+//					public void onLoadingComplete(String imageUri, View view,
+//							Bitmap loadedImage) {
+//						// TODO Auto-generated method stub
+//						super.onLoadingComplete(imageUri, view, loadedImage);
+//					}
+//
+//				});
 		viewHolder.userLogo.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -140,43 +147,55 @@ public class AIContentAdapter extends BaseContentAdapter<QiangYu> {
 			}
 		});
 		viewHolder.userName.setText(entity.getAuthor().getUsername());
-		viewHolder.contentText.setText(entity.getContent());
-		if (null == entity.getContentfigureurl()) {
-			viewHolder.contentImage.setVisibility(View.GONE);
-		} else {
-			viewHolder.contentImage.setVisibility(View.VISIBLE);
-			ImageLoader
-					.getInstance()
-					.displayImage(
-							entity.getContentfigureurl().getFileUrl() == null ? ""
-									: entity.getContentfigureurl().getFileUrl(
-											),
-							viewHolder.contentImage,
-							MyApplication.getInstance().getOptions(
-									R.drawable.bg_pic_loading),
-							new SimpleImageLoadingListener() {
-
-								@Override
-								public void onLoadingComplete(String imageUri,
-										View view, Bitmap loadedImage) {
-									// TODO Auto-generated method stub
-									super.onLoadingComplete(imageUri, view,
-											loadedImage);
-									float[] cons = ActivityUtil
-											.getBitmapConfiguration(
-													loadedImage,
-													viewHolder.contentImage,
-													1.0f);
-									RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-											(int) cons[0], (int) cons[1]);
-									layoutParams.addRule(RelativeLayout.BELOW,
-											R.id.content_text);
-									viewHolder.contentImage
-											.setLayoutParams(layoutParams);
-								}
-
-							});
+		if(entity.getContent().contains("逼")) {
+			viewHolder.contentText.setText(entity.getContent().substring(0, entity.getContent().lastIndexOf("逼")));
+		}else{
+			viewHolder.contentText.setText(entity.getContent());
 		}
+//		if (null == entity.getContentfigureurl()) {
+//			viewHolder.contentImage.setVisibility(View.GONE);
+//		} else {
+			if(entity.getContent().contains("逼")){
+				String iconurl2 = entity.getContent().substring(entity.getContent().lastIndexOf("逼")+1);
+				/*为什么图片一定要转化为 Bitmap格式的！！ */
+				Bitmap bitmap2 = CacheUtils.getLoacalBitmap(iconurl2); //从本地取图片(在cdcard中获取)  //
+				viewHolder.contentImage .setImageBitmap(bitmap2); //设置Bitmap
+				viewHolder.contentImage.setVisibility(View.VISIBLE);
+			}else{
+				viewHolder.contentImage.setVisibility(View.GONE);
+			}
+//			ImageLoader
+//					.getInstance()
+//					.displayImage(
+//							entity.getContentfigureurl().getFileUrl() == null ? ""
+//									: entity.getContentfigureurl().getFileUrl(
+//											),
+//							viewHolder.contentImage,
+//							MyApplication.getInstance().getOptions(
+//									R.drawable.bg_pic_loading),
+//							new SimpleImageLoadingListener() {
+//
+//								@Override
+//								public void onLoadingComplete(String imageUri,
+//										View view, Bitmap loadedImage) {
+//									// TODO Auto-generated method stub
+//									super.onLoadingComplete(imageUri, view,
+//											loadedImage);
+//									float[] cons = ActivityUtil
+//											.getBitmapConfiguration(
+//													loadedImage,
+//													viewHolder.contentImage,
+//													1.0f);
+//									RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+//											(int) cons[0], (int) cons[1]);
+//									layoutParams.addRule(RelativeLayout.BELOW,
+//											R.id.content_text);
+//									viewHolder.contentImage
+//											.setLayoutParams(layoutParams);
+//								}
+//
+//							});
+//		}
 		viewHolder.love.setText(entity.getLove() + "");
 		LogUtils.i("love", entity.getMyLove() + "..");
 		if (entity.getMyLove()) {

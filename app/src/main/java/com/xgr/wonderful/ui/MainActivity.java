@@ -1,5 +1,6 @@
 package com.xgr.wonderful.ui;
 
+import android.widget.RelativeLayout;
 import com.xgr.wonderful.entity.User;
 import net.youmi.android.offers.OffersManager;
 import android.app.AlertDialog;
@@ -32,6 +33,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private ImageView leftMenu;
 	private ImageView rightMenu;
 	private SlidingMenu mSlidingMenu;
+	private RelativeLayout llPub;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,10 @@ public class MainActivity extends SlidingFragmentActivity implements
 		setContentView(R.layout.center_frame);
 		leftMenu = (ImageView) findViewById(R.id.topbar_menu_left);
 		rightMenu = (ImageView) findViewById(R.id.topbar_menu_right);
+		llPub = (RelativeLayout) findViewById(R.id.ll_pub);
 		leftMenu.setOnClickListener(this);
 		rightMenu.setOnClickListener(this);
+		llPub.setOnClickListener(this);
 		initFragment();
 		// 显示提示对话框
 		// showDialog();
@@ -132,7 +136,31 @@ public class MainActivity extends SlidingFragmentActivity implements
 				startActivity(intent);
 			}
 			break;
-		default:
+			case  R.id.ll_pub:
+
+				// 当前用户登录
+				BmobUser currentUser2 = BmobUser.getCurrentUser(User.class);
+				if (currentUser2 != null) {
+					// 允许用户使用应用,即有了用户的唯一标识符，可以作为发布内容的字段
+					String name = currentUser2.getUsername();
+					String email = currentUser2.getEmail();
+					LogUtils.i(TAG, "username:" + name + ",email:" + email);
+					Intent intent = new Intent();
+					intent.setClass(MainActivity.this, EditActivity.class);
+					startActivity(intent);
+				} else {
+					// 缓存用户对象为空时， 可打开用户注册界面…
+					Toast.makeText(MainActivity.this, "请先登录。", Toast.LENGTH_SHORT)
+							.show();
+					// redictToActivity(mContext, RegisterAndLoginActivity.class,
+					// null);
+					Intent intent = new Intent();
+					intent.setClass(MainActivity.this,
+							RegisterAndLoginActivity.class);
+					startActivity(intent);
+				}
+				break;
+			default:
 			break;
 		}
 	}
