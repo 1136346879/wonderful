@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.core.content.FileProvider;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
@@ -48,361 +50,379 @@ import com.xgr.wonderful.utils.*;
 import io.reactivex.functions.Consumer;
 
 public class SettingsFragment extends BaseHomeFragment implements
-		OnClickListener, OnCheckedChangeListener {
+        OnClickListener, OnCheckedChangeListener {
 
-	TextView logout;
-	RelativeLayout update;
-	RelativeLayout cleanCache;
-	CheckBox pushSwitch;
-	CheckBox sexSwitch;
+    TextView logout;
+    RelativeLayout update;
+    RelativeLayout cleanCache;
+    CheckBox pushSwitch;
+    CheckBox sexSwitch;
 
-	RelativeLayout iconLayout;
-	ImageView userIcon;
+    RelativeLayout iconLayout;
+    ImageView userIcon;
 
-	RelativeLayout nickLayout;
-	TextView nickName;
+    RelativeLayout nickLayout;
+    TextView nickName;
 
-	RelativeLayout signLayout;
-	TextView signature;
+    RelativeLayout signLayout;
+    TextView signature;
 
-	IProgressControllor mIProgressControllor;
+    IProgressControllor mIProgressControllor;
 
-	static final int UPDATE_SEX = 11;
-	static final int UPDATE_ICON = 12;
-	static final int GO_LOGIN = 13;
-	static final int UPDATE_SIGN = 14;
-	static final int EDIT_SIGN = 15;
-	private ACache mCache;
+    static final int UPDATE_SEX = 11;
+    static final int UPDATE_ICON = 12;
+    static final int GO_LOGIN = 13;
+    static final int UPDATE_SIGN = 14;
+    static final int EDIT_SIGN = 15;
+    private ACache mCache;
 
-	public static SettingsFragment newInstance() {
-		SettingsFragment fragment = new SettingsFragment();
-		return fragment;
-	}
+    public static SettingsFragment newInstance() {
+        SettingsFragment fragment = new SettingsFragment();
+        return fragment;
+    }
 
-	@Override
-	protected int getLayoutId() {
-		// TODO Auto-generated method stub
-		return R.layout.fragment_settings;
-	}
+    @Override
+    protected int getLayoutId() {
+        // TODO Auto-generated method stub
+        return R.layout.fragment_settings;
+    }
 
-	@Override
-	protected void findViews(View view) {
-		mCache = ACache.get(getActivity());
-		// TODO Auto-generated method stub
-		logout = (TextView) view.findViewById(R.id.user_logout);
-		update = (RelativeLayout) view.findViewById(R.id.settings_update);
-		cleanCache = (RelativeLayout) view.findViewById(R.id.settings_cache);
-		pushSwitch = (CheckBox) view.findViewById(R.id.settings_push_switch);
-		sexSwitch = (CheckBox) view.findViewById(R.id.sex_choice_switch);
+    @Override
+    protected void findViews(View view) {
+        mCache = ACache.get(getActivity());
+        // TODO Auto-generated method stub
+        logout = (TextView) view.findViewById(R.id.user_logout);
+        update = (RelativeLayout) view.findViewById(R.id.settings_update);
+        cleanCache = (RelativeLayout) view.findViewById(R.id.settings_cache);
+        pushSwitch = (CheckBox) view.findViewById(R.id.settings_push_switch);
+        sexSwitch = (CheckBox) view.findViewById(R.id.sex_choice_switch);
 
-		iconLayout = (RelativeLayout) view.findViewById(R.id.user_icon);
-		userIcon = (ImageView) view.findViewById(R.id.user_icon_image);
+        iconLayout = (RelativeLayout) view.findViewById(R.id.user_icon);
+        userIcon = (ImageView) view.findViewById(R.id.user_icon_image);
 
-		nickLayout = (RelativeLayout) view.findViewById(R.id.user_nick);
-		nickName = (TextView) view.findViewById(R.id.user_nick_text);
+        nickLayout = (RelativeLayout) view.findViewById(R.id.user_nick);
+        nickName = (TextView) view.findViewById(R.id.user_nick_text);
 
-		signLayout = (RelativeLayout) view.findViewById(R.id.user_sign);
-		signature = (TextView) view.findViewById(R.id.user_sign_text);
-	}
+        signLayout = (RelativeLayout) view.findViewById(R.id.user_sign);
+        signature = (TextView) view.findViewById(R.id.user_sign_text);
+    }
 
-	@Override
-	protected void setupViews(Bundle bundle) {
-		// TODO Auto-generated method stub
-		initPersonalInfo();
-	}
+    @Override
+    protected void setupViews(Bundle bundle) {
+        // TODO Auto-generated method stub
+        initPersonalInfo();
+    }
 
-	private void initPersonalInfo() {
-		User user = BmobUser.getCurrentUser( User.class);
-		if (user != null) {
-			nickName.setText(user.getUsername());
-			signature.setText(user.getSignature());
-			if (user.getSex().equals(Constant.SEX_FEMALE)) {
-				sexSwitch.setChecked(true);
-				sputil.setValue("sex_settings", 0);
-			} else {
-				sexSwitch.setChecked(false);
-				sputil.setValue("sex_settings", 1);
-			}
-			String iconurl = mCache.getAsString("iconUrl");
-			if(iconurl!= null){
+    private void initPersonalInfo() {
+        User user = BmobUser.getCurrentUser(User.class);
+        if (user != null) {
+            nickName.setText(user.getUsername());
+            signature.setText(user.getSignature());
+            if (user.getSex().equals(Constant.SEX_FEMALE)) {
+                sexSwitch.setChecked(true);
+                sputil.setValue("sex_settings", 0);
+            } else {
+                sexSwitch.setChecked(false);
+                sputil.setValue("sex_settings", 1);
+            }
+            String iconurl = mCache.getAsString("iconUrl");
+            if (iconurl != null) {
                 /*为什么图片一定要转化为 Bitmap格式的！！ */
                 Bitmap bitmap = CacheUtils.getLoacalBitmap(iconurl); //从本地取图片(在cdcard中获取)  //
-                userIcon .setImageBitmap(bitmap); //设置Bitmap
+                userIcon.setImageBitmap(bitmap); //设置Bitmap
             }
 
-			BmobFile avatarFile = user.getAvatar();
-			if (null != avatarFile) {
-				ImageLoader.getInstance().displayImage(
-						iconurl,
-						userIcon,
-						MyApplication.getInstance().getOptions(
-								R.drawable.user_icon_default_main),
-						new SimpleImageLoadingListener() {
+            BmobFile avatarFile = user.getAvatar();
+            if (null != avatarFile) {
+                ImageLoader.getInstance().displayImage(
+                        iconurl,
+                        userIcon,
+                        MyApplication.getInstance().getOptions(
+                                R.drawable.user_icon_default_main),
+                        new SimpleImageLoadingListener() {
 
-							@Override
-							public void onLoadingComplete(String imageUri,
-									View view, Bitmap loadedImage) {
-								// TODO Auto-generated method stub
-								super.onLoadingComplete(imageUri, view,
-										loadedImage);
-							}
+                            @Override
+                            public void onLoadingComplete(String imageUri,
+                                                          View view, Bitmap loadedImage) {
+                                // TODO Auto-generated method stub
+                                super.onLoadingComplete(imageUri, view,
+                                        loadedImage);
+                            }
 
-						});
-			}
-			logout.setText("退出登录");
-		} else {
-			logout.setText("登录");
-		}
-	}
+                        });
+            }
+            logout.setText("退出登录");
+        } else {
+            logout.setText("登录");
+        }
+    }
 
 
+    @Override
+    public void onAttach(Activity activity) {
+        // TODO Auto-generated method stub
+        super.onAttach(activity);
+        try {
+            mIProgressControllor = (IProgressControllor) activity;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
-		super.onAttach(activity);
-		try {
-			mIProgressControllor = (IProgressControllor) activity;
-		} catch (ClassCastException e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * 判断用户是否登录
+     *
+     * @return
+     */
+    private boolean isLogined() {
+        BmobUser user = BmobUser.getCurrentUser(User.class);
+        if (user != null) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * 判断用户是否登录
-	 * 
-	 * @return
-	 */
-	private boolean isLogined() {
-		BmobUser user = BmobUser.getCurrentUser( User.class);
-		if (user != null) {
-			return true;
-		}
-		return false;
-	}
+    @Override
+    protected void setListener() {
+        // TODO Auto-generated method stub
+        logout.setOnClickListener(this);
+        update.setOnClickListener(this);
+        cleanCache.setOnClickListener(this);
+        pushSwitch.setOnCheckedChangeListener(this);
+        sexSwitch.setOnCheckedChangeListener(this);
 
-	@Override
-	protected void setListener() {
-		// TODO Auto-generated method stub
-		logout.setOnClickListener(this);
-		update.setOnClickListener(this);
-		cleanCache.setOnClickListener(this);
-		pushSwitch.setOnCheckedChangeListener(this);
-		sexSwitch.setOnCheckedChangeListener(this);
+        iconLayout.setOnClickListener(this);
+        nickLayout.setOnClickListener(this);
+        signLayout.setOnClickListener(this);
+    }
 
-		iconLayout.setOnClickListener(this);
-		nickLayout.setOnClickListener(this);
-		signLayout.setOnClickListener(this);
-	}
+    @Override
+    protected void fetchData() {
+        // TODO Auto-generated method stub
 
-	@Override
-	protected void fetchData() {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        switch (v.getId()) {
+            case R.id.user_logout:
+                if (isLogined()) {
+                    BmobUser.logOut();
+                    ActivityUtil.show(getActivity(), "登出成功。");
+                } else {
+                    redictToLogin(GO_LOGIN);
+                }
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		switch (v.getId()) {
-		case R.id.user_logout:
-			if (isLogined()) {
-				BmobUser.logOut();
-				ActivityUtil.show(getActivity(), "登出成功。");
-			} else {
-				redictToLogin(GO_LOGIN);
-			}
+                break;
+            case R.id.settings_update:
+                Toast.makeText(mContext, "正在检查。。。", Toast.LENGTH_SHORT).show();
+                UmengUpdateAgent.setUpdateAutoPopup(false);
+                UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
 
-			break;
-		case R.id.settings_update:
-			Toast.makeText(mContext, "正在检查。。。", Toast.LENGTH_SHORT).show();
-			UmengUpdateAgent.setUpdateAutoPopup(false);
-			UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+                    @Override
+                    public void onUpdateReturned(int updateStatus,
+                                                 UpdateResponse updateInfo) {
+                        // TODO Auto-generated method stub
+                        switch (updateStatus) {
+                            case UpdateStatus.Yes: // has update
+                                UmengUpdateAgent.showUpdateDialog(mContext, updateInfo);
+                                break;
+                            case UpdateStatus.No: // has no update
+                                Toast.makeText(mContext, "没有更新", Toast.LENGTH_SHORT)
+                                        .show();
+                                break;
+                            case UpdateStatus.NoneWifi: // none wifi
+                                Toast.makeText(mContext, "没有wifi连接， 只在wifi下更新",
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case UpdateStatus.Timeout: // time out
+                                Toast.makeText(mContext, "请检查网络", Toast.LENGTH_SHORT)
+                                        .show();
+                                break;
+                        }
+                    }
+                });
+                UmengUpdateAgent.forceUpdate(mContext);
+                break;
+            case R.id.settings_cache:
+                ImageLoader.getInstance().clearDiscCache();
+                ActivityUtil.show(getActivity(), "清除缓存完毕");
+                break;
 
-				@Override
-				public void onUpdateReturned(int updateStatus,
-						UpdateResponse updateInfo) {
-					// TODO Auto-generated method stub
-					switch (updateStatus) {
-					case UpdateStatus.Yes: // has update
-						UmengUpdateAgent.showUpdateDialog(mContext, updateInfo);
-						break;
-					case UpdateStatus.No: // has no update
-						Toast.makeText(mContext, "没有更新", Toast.LENGTH_SHORT)
-								.show();
-						break;
-					case UpdateStatus.NoneWifi: // none wifi
-						Toast.makeText(mContext, "没有wifi连接， 只在wifi下更新",
-								Toast.LENGTH_SHORT).show();
-						break;
-					case UpdateStatus.Timeout: // time out
-						Toast.makeText(mContext, "请检查网络", Toast.LENGTH_SHORT)
-								.show();
-						break;
-					}
-				}
-			});
-			UmengUpdateAgent.forceUpdate(mContext);
-			break;
-		case R.id.settings_cache:
-			ImageLoader.getInstance().clearDiscCache();
-			ActivityUtil.show(getActivity(), "清除缓存完毕");
-			break;
+            case R.id.user_icon:
+                if (isLogined()) {
+                    showAlbumDialog();
+                } else {
+                    redictToLogin(UPDATE_ICON);
+                }
+                break;
+            case R.id.user_nick:
+                // 无需设置
+                break;
+            case R.id.user_sign:
+                if (isLogined()) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, EditSignActivity.class);
+                    startActivityForResult(intent, EDIT_SIGN);
+                } else {
+                    redictToLogin(UPDATE_SIGN);
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
-		case R.id.user_icon:
-			if (isLogined()) {
-				showAlbumDialog();
-			} else {
-				redictToLogin(UPDATE_ICON);
-			}
-			break;
-		case R.id.user_nick:
-			// 无需设置
-			break;
-		case R.id.user_sign:
-			if (isLogined()) {
-				Intent intent = new Intent();
-				intent.setClass(mContext, EditSignActivity.class);
-				startActivityForResult(intent, EDIT_SIGN);
-			} else {
-				redictToLogin(UPDATE_SIGN);
-			}
-			break;
-		default:
-			break;
-		}
-	}
+    String dateTime;
+    AlertDialog albumDialog;
 
-	String dateTime;
-	AlertDialog albumDialog;
+    public void showAlbumDialog() {
+        albumDialog = new AlertDialog.Builder(mContext).create();
+        albumDialog.setCanceledOnTouchOutside(true);
+        View v = LayoutInflater.from(mContext).inflate(
+                R.layout.dialog_usericon, null);
+        albumDialog.show();
+        albumDialog.setContentView(v);
+        albumDialog.getWindow().setGravity(Gravity.CENTER);
 
-	public void showAlbumDialog() {
-		albumDialog = new AlertDialog.Builder(mContext).create();
-		albumDialog.setCanceledOnTouchOutside(true);
-		View v = LayoutInflater.from(mContext).inflate(
-				R.layout.dialog_usericon, null);
-		albumDialog.show();
-		albumDialog.setContentView(v);
-		albumDialog.getWindow().setGravity(Gravity.CENTER);
+        TextView albumPic = (TextView) v.findViewById(R.id.album_pic);
+        TextView cameraPic = (TextView) v.findViewById(R.id.camera_pic);
+        albumPic.setOnClickListener(new OnClickListener() {
 
-		TextView albumPic = (TextView) v.findViewById(R.id.album_pic);
-		TextView cameraPic = (TextView) v.findViewById(R.id.camera_pic);
-		albumPic.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                albumDialog.dismiss();
+                Date date1 = new Date(System.currentTimeMillis());
+                dateTime = date1.getTime() + "";
+                getAvataFromAlbum();
+            }
+        });
+        cameraPic.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				albumDialog.dismiss();
-				Date date1 = new Date(System.currentTimeMillis());
-				dateTime = date1.getTime() + "";
-				getAvataFromAlbum();
-			}
-		});
-		cameraPic.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                albumDialog.dismiss();
+                Date date = new Date(System.currentTimeMillis());
+                dateTime = date.getTime() + "";
+                RxPermissions rxPermissions = new RxPermissions(getActivity());
+                rxPermissions.request(Manifest.permission.CAMERA).subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            getAvataFromCamera();
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				albumDialog.dismiss();
-				Date date = new Date(System.currentTimeMillis());
-				dateTime = date.getTime() + "";
-				getAvataFromCamera();
-			}
-		});
-	}
+                        } else {
+                            Toast.makeText(mContext, "请打开拍照权限", 1).show();
+                        }
 
-	private void getAvataFromCamera() {
-		File f = new File(CacheUtils.getCacheDirectory(mContext, true, "icon")
-				+ dateTime);
-		if (f.exists()) {
-			f.delete();
-		}
-		try {
-			f.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Uri uri = Uri.fromFile(f);
-		Log.e("uri", uri + "");
+                    }
+                });
+            }
+        });
+    }
 
-		Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		camera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-		startActivityForResult(camera, 1);
-	}
+    private void getAvataFromCamera() {
+        File f = new File(CacheUtils.getCacheDirectory(mContext, true, "icon")
+                + dateTime);
+        if (f.exists()) {
+            f.delete();
+        }
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Uri uri;
 
-	private void getAvataFromAlbum() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(mContext, "com.xgr.wonderful.fileProvider", f);
+        } else {
+            uri = Uri.fromFile(f);
+        }
+        Log.e("uri", uri + "");
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        camera.addCategory(Intent.CATEGORY_DEFAULT);
+        camera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+        startActivityForResult(camera, 1);
+    }
+
+    private void getAvataFromAlbum() {
 //		Intent intent2 = new Intent(Intent.ACTION_GET_CONTENT);
 //		intent2.setType("image/*");
 //		startActivityForResult(intent2, 2);
-		RxPermissions rxPermissions = new RxPermissions(this);
-		rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
-				.subscribe(new Consumer<Boolean>() {
-					@Override
-					public void accept(Boolean aBoolean) throws Exception {
-						if(aBoolean){
-							Intent intent =new  Intent(Intent.ACTION_PICK, null);
-							// 如果要限制上传到服务器的图片类型时可以直接写如：image/jpeg 、 image/png等的类型
-							intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-							startActivityForResult(intent,2);
-						}
-					}
-				});
-	}
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            Intent intent = new Intent(Intent.ACTION_PICK, null);
+                            // 如果要限制上传到服务器的图片类型时可以直接写如：image/jpeg 、 image/png等的类型
+                            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                            startActivityForResult(intent, 2);
+                        }
+                    }
+                });
+    }
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		// TODO Auto-generated method stub
-		switch (buttonView.getId()) {
-		case R.id.settings_push_switch:
-			if (isChecked) {
-				// 接受推送，储存值
-				sputil.setValue("isPushOn", true);
-				PushAgent mPushAgent = PushAgent.getInstance(mContext);
-				mPushAgent.enable();
-			} else {
-				// 关闭推送，储存值
-				sputil.setValue("isPushOn", false);
-				PushAgent mPushAgent = PushAgent.getInstance(mContext);
-				mPushAgent.disable();
-			}
-			break;
-		case R.id.sex_choice_switch:
-			if (isChecked) {
-				sputil.setValue("sex_settings", 0);
-				updateSex(0);
-			} else {
-				sputil.setValue("sex_settings", 1);
-				updateSex(1);
-			}
-			break;
-		default:
-			break;
-		}
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        // TODO Auto-generated method stub
+        switch (buttonView.getId()) {
+            case R.id.settings_push_switch:
+                if (isChecked) {
+                    // 接受推送，储存值
+                    sputil.setValue("isPushOn", true);
+                    PushAgent mPushAgent = PushAgent.getInstance(mContext);
+                    mPushAgent.enable();
+                } else {
+                    // 关闭推送，储存值
+                    sputil.setValue("isPushOn", false);
+                    PushAgent mPushAgent = PushAgent.getInstance(mContext);
+                    mPushAgent.disable();
+                }
+                break;
+            case R.id.sex_choice_switch:
+                if (isChecked) {
+                    sputil.setValue("sex_settings", 0);
+                    updateSex(0);
+                } else {
+                    sputil.setValue("sex_settings", 1);
+                    updateSex(1);
+                }
+                break;
+            default:
+                break;
+        }
 
-	}
+    }
 
-	private void updateSex(int sex) {
-		User user = BmobUser.getCurrentUser(User.class);
-		if (user != null) {
-			if (sex == 0) {
-				user.setSex(Constant.SEX_FEMALE);
-			} else {
-				user.setSex(Constant.SEX_MALE);
-			}
-			if (mIProgressControllor != null) {
-				mIProgressControllor.showActionBarProgress();
-			}
-			user.update(new UpdateListener() {
+    private void updateSex(int sex) {
+        User user = BmobUser.getCurrentUser(User.class);
+        if (user != null) {
+            if (sex == 0) {
+                user.setSex(Constant.SEX_FEMALE);
+            } else {
+                user.setSex(Constant.SEX_MALE);
+            }
+            if (mIProgressControllor != null) {
+                mIProgressControllor.showActionBarProgress();
+            }
+            user.update(new UpdateListener() {
 
-				@Override
-				public void done(BmobException e) {
-					// TODO Auto-generated method stub
-					if (mIProgressControllor != null) {
-						mIProgressControllor.hideActionBarProgress();
-					}
-					ActivityUtil.show(getActivity(), "更新信息成功。");
-					LogUtils.i(TAG, "更新信息成功。");
-				}
+                @Override
+                public void done(BmobException e) {
+                    // TODO Auto-generated method stub
+                    if (mIProgressControllor != null) {
+                        mIProgressControllor.hideActionBarProgress();
+                    }
+                    ActivityUtil.show(getActivity(), "更新信息成功。");
+                    LogUtils.i(TAG, "更新信息成功。");
+                }
 
 //				@Override
 //				public void onSuccess() {
@@ -423,61 +443,66 @@ public class SettingsFragment extends BaseHomeFragment implements
 //					ActivityUtil.show(getActivity(), "更新信息失败。请检查网络~");
 //					LogUtils.i(TAG, "更新失败1-->" + arg1);
 //				}
-			});
-		} else {
-			redictToLogin(UPDATE_SEX);
-		}
+            });
+        } else {
+            redictToLogin(UPDATE_SEX);
+        }
 
-	}
+    }
 
-	private void redictToLogin(int requestCode) {
-		Intent intent = new Intent();
-		intent.setClass(getActivity(), RegisterAndLoginActivity.class);
-		startActivityForResult(intent, requestCode);
-		ActivityUtil.show(mContext, "请先登录。");
-	}
+    private void redictToLogin(int requestCode) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), RegisterAndLoginActivity.class);
+        startActivityForResult(intent, requestCode);
+        ActivityUtil.show(mContext, "请先登录。");
+    }
 
-	String iconUrl;
+    String iconUrl;
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == Activity.RESULT_OK) {
-			switch (requestCode) {
-			case UPDATE_SEX:
-				initPersonalInfo();
-				break;
-			case UPDATE_ICON:
-				initPersonalInfo();
-				iconLayout.performClick();
-				break;
-			case UPDATE_SIGN:
-				initPersonalInfo();
-				signLayout.performClick();
-				break;
-			case EDIT_SIGN:
-				initPersonalInfo();
-				break;
-			case 1:
-				String files = CacheUtils.getCacheDirectory(mContext, true,
-						"icon") + dateTime;
-				File file = new File(files);
-				if (file.exists() && file.length() > 0) {
-					Uri uri = Uri.fromFile(file);
-					startPhotoZoom(uri);
-				} else {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case UPDATE_SEX:
+                    initPersonalInfo();
+                    break;
+                case UPDATE_ICON:
+                    initPersonalInfo();
+                    iconLayout.performClick();
+                    break;
+                case UPDATE_SIGN:
+                    initPersonalInfo();
+                    signLayout.performClick();
+                    break;
+                case EDIT_SIGN:
+                    initPersonalInfo();
+                    break;
+                case 1:
+                    String files = CacheUtils.getCacheDirectory(mContext, true,
+                            "icon") + dateTime;
+                    File file = new File(files);
+                    if (file.exists() && file.length() > 0) {
+                        Uri uri;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            uri = FileProvider.getUriForFile(mContext, "com.xgr.wonderful.fileProvider", file);
+                        } else {
+                            uri = Uri.fromFile(file);
+                        }
+                        startPhotoZoom(uri);
+                    } else {
 
-				}
-				break;
-			case 2:
-				if (data == null) {
-					return;
-				}
-				startPhotoZoom(data.getData());
-				break;
-			case 3:
-				if (data != null) {
+                    }
+                    break;
+                case 2:
+                    if (data == null) {
+                        return;
+                    }
+                    startPhotoZoom(data.getData());
+                    break;
+                case 3:
+                    if (data != null) {
 //					try {
 //						Uri selectedImage = data.getData();
 //								String[] filePathColumn = new String[]{MediaStore.Images.Media.DATA};
@@ -490,107 +515,111 @@ public class SettingsFragment extends BaseHomeFragment implements
 //					} catch ( Exception e) {
 //						LogUtils.e("异常--->",e+"");
 //					}
-					Bundle extras = data.getExtras();
-					if (extras != null) {
-						Bitmap bitmap = extras.getParcelable("data");
-						// 锟斤拷锟斤拷图片
-						iconUrl = saveToSdCard(bitmap);
-						userIcon.setImageBitmap(bitmap);
-						mCache.put("iconUrl",iconUrl,7*24*60*60);
-						updateIcon(iconUrl);
-					}
-				}
-				break;
-			case GO_LOGIN:
-				initPersonalInfo();
-				logout.setText("退出登录");
-				break;
-			default:
-				break;
-			}
-		}
-	}
+                        Bundle extras = data.getExtras();
+                        if (extras != null) {
+                            Bitmap bitmap = extras.getParcelable("data");
+                            // 锟斤拷锟斤拷图片
+                            iconUrl = saveToSdCard(bitmap);
+                            userIcon.setImageBitmap(bitmap);
+                            mCache.put("iconUrl", iconUrl, 7 * 24 * 60 * 60);
+                            updateIcon(iconUrl);
+                        }
+                    }
+                    break;
+                case GO_LOGIN:
+                    initPersonalInfo();
+                    logout.setText("退出登录");
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
-	private void updateIcon(String avataPath) {
-		if (avataPath != null) {
-			final BmobFile file = new BmobFile(new File(avataPath));
-			if (mIProgressControllor != null) {
-				mIProgressControllor.showActionBarProgress();
-			}
+    private void updateIcon(String avataPath) {
+        if (avataPath != null) {
+            final BmobFile file = new BmobFile(new File(avataPath));
+            if (mIProgressControllor != null) {
+                mIProgressControllor.showActionBarProgress();
+            }
 
-			file.uploadblock( new UploadFileListener() {
+            file.uploadblock(new UploadFileListener() {
 
-				@Override
-				public void onProgress(Integer arg0) {
-					// TODO Auto-generated method stub
+                @Override
+                public void onProgress(Integer arg0) {
+                    // TODO Auto-generated method stub
 
-				}
+                }
 
-				@Override
-				public void done(BmobException e) {
-					// TODO Auto-generated method stub
-					if (mIProgressControllor != null) {
-						mIProgressControllor.hideActionBarProgress();
-					}
+                @Override
+                public void done(BmobException e) {
+                    // TODO Auto-generated method stub
+                    if (mIProgressControllor != null) {
+                        mIProgressControllor.hideActionBarProgress();
+                    }
 //					LogUtils.i(TAG, "上传文件成功。" + file.getFileUrl());
-					User currentUser = BmobUser.getCurrentUser(
-							User.class);
-					currentUser.setAvatar(file);
-					if (mIProgressControllor != null) {
-						mIProgressControllor.showActionBarProgress();
-					}
-					currentUser.update( new UpdateListener() {
+                    User currentUser = BmobUser.getCurrentUser(
+                            User.class);
+                    currentUser.setAvatar(file);
+                    if (mIProgressControllor != null) {
+                        mIProgressControllor.showActionBarProgress();
+                    }
+                    currentUser.update(new UpdateListener() {
 
-						@Override
-						public void done(BmobException e) {
-							// TODO Auto-generated method stub
-							if (mIProgressControllor != null) {
-								mIProgressControllor.hideActionBarProgress();
-							}
-							ActivityUtil.show(getActivity(), "更改头像成功。");
-						}
-					});
-				}
+                        @Override
+                        public void done(BmobException e) {
+                            // TODO Auto-generated method stub
+                            if (mIProgressControllor != null) {
+                                mIProgressControllor.hideActionBarProgress();
+                            }
+                            ActivityUtil.show(getActivity(), "更改头像成功。");
+                        }
+                    });
+                }
 
-			});
-		}
-	}
+            });
+        }
+    }
 
-	public void startPhotoZoom(Uri uri) {
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		// outputX outputY 锟角裁硷拷图片锟斤拷锟�
-		intent.putExtra("outputX", 120);
-		intent.putExtra("outputY", 120);
-		intent.putExtra("crop", "true");
-		intent.putExtra("scale", true);// 去锟斤拷锟节憋拷
-		intent.putExtra("scaleUpIfNeeded", true);// 去锟斤拷锟节憋拷
-		// intent.putExtra("noFaceDetection", true);//锟斤拷锟斤拷识锟斤拷
-		intent.putExtra("return-data", true);
-		startActivityForResult(intent, 3);
+    public void startPhotoZoom(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
 
-	}
+//需要加上这两句话 ： uri 权限
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX outputY 锟角裁硷拷图片锟斤拷锟�
+        intent.putExtra("outputX", 120);
+        intent.putExtra("outputY", 120);
+        intent.putExtra("crop", "true");
+        intent.putExtra("scale", true);// 去锟斤拷锟节憋拷
+        intent.putExtra("scaleUpIfNeeded", true);// 去锟斤拷锟节憋拷
+        // intent.putExtra("noFaceDetection", true);//锟斤拷锟斤拷识锟斤拷
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, 3);
 
-	public String saveToSdCard(Bitmap bitmap) {
-		String files = CacheUtils.getCacheDirectory(mContext, true, "icon")
-				+ dateTime + "_12.jpg";
-		File file = new File(files);
-		try {
-			FileOutputStream out = new FileOutputStream(file);
-			if (bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out)) {
-				out.flush();
-				out.close();
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		LogUtils.i(TAG, file.getAbsolutePath());
-		return file.getAbsolutePath();
-	}
+    }
+
+    public String saveToSdCard(Bitmap bitmap) {
+        String files = CacheUtils.getCacheDirectory(mContext, true, "icon")
+                + dateTime + "_12.jpg";
+        File file = new File(files);
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out)) {
+                out.flush();
+                out.close();
+            }
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        LogUtils.i(TAG, file.getAbsolutePath());
+        return file.getAbsolutePath();
+    }
 }

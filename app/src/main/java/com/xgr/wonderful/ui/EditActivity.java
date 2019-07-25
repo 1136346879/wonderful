@@ -16,6 +16,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.*;
+import androidx.core.content.FileProvider;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
@@ -189,26 +191,50 @@ public class EditActivity extends BasePageActivity implements OnClickListener {
 		case R.id.take_layout:
 			Date date = new Date(System.currentTimeMillis());
 			dateTime = date.getTime() + "";
-			File f = new File(CacheUtils.getCacheDirectory(mContext, true,
-					"pic") + dateTime);
-			if (f.exists()) {
-				f.delete();
-			}
-			try {
-				f.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Uri uri = Uri.fromFile(f);
-			Log.e("uri", uri + "");
 
-			Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			camera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-			startActivityForResult(camera, REQUEST_CODE_CAMERA);
+			RxPermissions rxPermissions2 = new RxPermissions(this);
+			rxPermissions2.request(Manifest.permission.CAMERA).subscribe(new Consumer<Boolean>() {
+				@Override
+				public void accept(Boolean aBoolean) throws Exception {
+					if (aBoolean) {
+						getAvataFromCamera();
+
+					} else {
+						Toast.makeText(mContext, "请打开拍照权限", 1).show();
+					}
+
+				}
+			});
+
 			break;
 		default:
 			break;
 		}
+	}
+
+	private void getAvataFromCamera() {
+		File f = new File(CacheUtils.getCacheDirectory(mContext, true,
+				"pic") + dateTime);
+		if (f.exists()) {
+			f.delete();
+		}
+		try {
+			f.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Uri uri;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			uri = FileProvider.getUriForFile(mContext, "com.xgr.wonderful.fileProvider", f);
+		} else {
+			uri = Uri.fromFile(f);
+		}
+		Log.e("uri", uri + "");
+
+		Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		camera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+		startActivityForResult(camera, REQUEST_CODE_CAMERA);
 	}
 
 	/*
