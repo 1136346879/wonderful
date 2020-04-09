@@ -1,32 +1,32 @@
 
-msquid:S4042Ë"IUse "java.nio.Files#delete" here for better messages on error conditions.(é‘‚©úÿÿÿÿ8ê±ÄÅÁ-
+Osquid:S1135£"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Osquid:S1135"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+gsquid:UnusedPrivateMethodˆ":Remove this unused private "compressImageFromFile" method.(ÿÁò8ê±ÄÅÁ-
+Vsquid:S1135ş"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ8ê±ÄÅÁ-
+?squid:S1185w"(Remove this method to simply inherit it.(ÚİË 
 ^
 squid:S899Ë";Do something with the "boolean" value returned by "delete".(é‘‚©úÿÿÿÿ8ê±ÄÅÁ-
+Vsquid:S1135Ñ"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
+Vsquid:S1135³"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
+Vsquid:S1135ş"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
+Vsquid:S1135"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ8ê±ÄÅÁ-
+dsquid:S2147€"ECombine this catch with the one at line 381, which has the same body.(ï­£Ä8ê±ÄÅÁ-
+Gsquid:S1148Ğ"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ê±ÄÅÁ-
 e
 squid:S899Î"BDo something with the "boolean" value returned by "createNewFile".(ôü¿Ÿÿÿÿÿÿ8ê±ÄÅÁ-
-Gsquid:S1148‚"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ê±ÄÅÁ-
-wsquid:S1488I"`Immediately return this expression instead of assigning it to the temporary variable "fragment".(ÛÉÿÊ
-Vsquid:S1135ş"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ8ê±ÄÅÁ-
-Isquid:S00108‰")Either remove or fill this block of code.(å¥‡8ê±ÄÅÁ-
-gsquid:UnusedPrivateMethodˆ":Remove this unused private "compressImageFromFile" method.(ÿÁò8ê±ÄÅÁ-
-Usquid:MissingDeprecatedCheck1"(Add the missing @deprecated Javadoc tag.(µæš«şÿÿÿÿ
-Osquid:S1135£"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Vsquid:S1135ï"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ŠÙÅÅÁ-
-Gsquid:S1148Ğ"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ê±ÄÅÁ-
-Osquid:S1135"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Vsquid:S1135³"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
-Osquid:S1135"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-dsquid:S2147€"ECombine this catch with the one at line 381, which has the same body.(ï­£Ä8ê±ÄÅÁ-
 Gsquid:S1148ÿ"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ê±ÄÅÁ-
-Nsquid:S1135U"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Vsquid:S1135¾"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
-Osquid:S1135„"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Nsquid:S1135y"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Vsquid:S1135ş"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
-Qsquid:S11331"5Do not forget to remove this deprecated code someday.(µæš«şÿÿÿÿ
-Vsquid:S1135¿"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
-Vsquid:S1135"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ8ê±ÄÅÁ-
-?squid:S1185w"(Remove this method to simply inherit it.(ÚİË 
-Nsquid:S1135O"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Vsquid:S1135Ñ"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
+wsquid:S1488I"`Immediately return this expression instead of assigning it to the temporary variable "fragment".(ÛÉÿÊ
 Nsquid:S1135g"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Osquid:S1135"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Vsquid:S1135¿"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
+Qsquid:S11331"5Do not forget to remove this deprecated code someday.(µæš«şÿÿÿÿ
+Isquid:S00108‰")Either remove or fill this block of code.(å¥‡8ê±ÄÅÁ-
+Nsquid:S1135y"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Vsquid:S1135ï"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ŠÙÅÅÁ-
+Nsquid:S1135U"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Osquid:S1135„"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Gsquid:S1148‚"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ê±ÄÅÁ-
+msquid:S4042Ë"IUse "java.nio.Files#delete" here for better messages on error conditions.(é‘‚©úÿÿÿÿ8ê±ÄÅÁ-
+Nsquid:S1135O"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Vsquid:S1135¾"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8ê±ÄÅÁ-
+Usquid:MissingDeprecatedCheck1"(Add the missing @deprecated Javadoc tag.(µæš«şÿÿÿÿ

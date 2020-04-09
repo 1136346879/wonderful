@@ -1,31 +1,31 @@
 
-jsquid:CommentedOutCodeLine‰"<This block of commented-out lines of code should be removed.(²…º 8¹ÉÅÄÁ-
-Nsquid:S1135K"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-|squid:S1488E"`Immediately return this expression instead of assigning it to the temporary variable "fragment".(ÚçÎşÿÿÿÿ
-Osquid:S1135Š"2Complete the task associated to this TODO comment.(àøö×ûÿÿÿÿ
-nsquid:S14503"XRemove the "mListView" field and declare it as a local variable in the relevant methods.(‡¾÷\
-osquid:CommentedOutCodeLine•"<This block of commented-out lines of code should be removed.(†Ò®µşÿÿÿÿ8¹ÉÅÄÁ-
-Osquid:S1135Â"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Osquid:S1135Ú"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+osquid:CommentedOutCodeLine§"<This block of commented-out lines of code should be removed.(ÂÖô“üÿÿÿÿ8İ®ÄÄÁ-
 vsquid:S2293 "YReplace the type specification in this constructor call with the diamond operator ("<>").( ‰éàÿÿÿÿÿ
-qsquid:S2293é"YReplace the type specification in this constructor call with the diamond operator ("<>").(»¦ĞÃ
-Nsquid:S1135Q"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Osquid:S1135À"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-jsquid:CommentedOutCodeLine‘"<This block of commented-out lines of code should be removed.(«»8¹ÉÅÄÁ-
-Osquid:S1135¬"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-hsquid:S1301Ğ"KReplace this "switch" statement by "if" statements to increase readability.(×ö³–úÿÿÿÿ
-Osquid:S1135¡"2Complete the task associated to this TODO comment.(àøö×ûÿÿÿÿ
-Osquid:S1135‘"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-jsquid:CommentedOutCodeLine "<This block of commented-out lines of code should be removed.(º¥ÆÖ8İ®ÄÄÁ-
-Vsquid:S1135ó"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8Ê‰ÅÄÁ-
-@squid:S1148Ç"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-Osquid:S1135›"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Osquid:S1135¨"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Osquid:S1135"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+nsquid:S14501"XRemove the "mListView" field and declare it as a local variable in the relevant methods.(‡¾÷\
+jsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(²…º 8¹ÉÅÄÁ-
+Osquid:S1135ß"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Osquid:S1135Ç"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
 Nsquid:S1135`"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Osquid:S1135›"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Nsquid:S1135Q"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Vsquid:S1135ø"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ8Ê‰ÅÄÁ-
+Osquid:S1135è"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Osquid:S1135Å"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+|squid:S1488E"`Immediately return this expression instead of assigning it to the temporary variable "fragment".(ÚçÎşÿÿÿÿ
+@squid:S1148Ì"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
 hsquid:CommentedOutCodeLine©"<This block of commented-out lines of code should be removed.(ÔæâÉüÿÿÿÿ
-Osquid:S1135ã"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Osquid:S1135Í"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-osquid:CommentedOutCodeLine‹"<This block of commented-out lines of code should be removed.(ÂÖô“üÿÿÿÿ8¹ÉÅÄÁ-
-osquid:CommentedOutCodeLine¢"<This block of commented-out lines of code should be removed.(ÂÖô“üÿÿÿÿ8İ®ÄÄÁ-
-]squid:S1155õ">Use isEmpty() to check whether the collection is empty or not.(Ê“°8†™ÆÄÁ-
+Osquid:S1135‘"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+qsquid:S2293î"YReplace the type specification in this constructor call with the diamond operator ("<>").(»¦ĞÃ
+Osquid:S1135±"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+]squid:S1155ú">Use isEmpty() to check whether the collection is empty or not.(Ê“°8†™ÆÄÁ-
+Osquid:S1135¨"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+Nsquid:S1135K"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+hsquid:S1301Õ"KReplace this "switch" statement by "if" statements to increase readability.(×ö³–úÿÿÿÿ
+jsquid:CommentedOutCodeLine–"<This block of commented-out lines of code should be removed.(«»8¹ÉÅÄÁ-
+osquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÂÖô“üÿÿÿÿ8¹ÉÅÄÁ-
+Osquid:S1135¦"2Complete the task associated to this TODO comment.(àøö×ûÿÿÿÿ
+jsquid:CommentedOutCodeLine¥"<This block of commented-out lines of code should be removed.(º¥ÆÖ8İ®ÄÄÁ-
+Osquid:S1135"2Complete the task associated to this TODO comment.(àøö×ûÿÿÿÿ
+Osquid:S1135"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+osquid:CommentedOutCodeLineš"<This block of commented-out lines of code should be removed.(†Ò®µşÿÿÿÿ8¹ÉÅÄÁ-
+Osquid:S1135Ò"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ

@@ -1,12 +1,12 @@
 
 hsquid:CommentedOutCodeLineÅ"<This block of commented-out lines of code should be removed.(Œ¦˜„þÿÿÿÿ
-msquid:S00116-"URename this field "navi_intro" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ó–ë’
-psquid:S00116,"XRename this field "navi_feedback" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Òþ»ª
-lsquid:S00100¬"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(À ­œþÿÿÿÿ
-Isquid:S1068'"2Remove this unused "DINNERFRAGMENT" private field.(®ðùæ
-?squid:S11858"(Remove this method to simply inherit it.(ßìê¯
 lsquid:S00116*"TRename this field "navi_home" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ä‰÷“
-rsquid:S00116."URename this field "navi_about" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ÿá¸þøÿÿÿÿ
+msquid:S00116-"URename this field "navi_intro" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ó–ë’
 usquid:S00116+"XRename this field "navi_settings" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£¦ãÐùÿÿÿÿ
 P"squid:SwitchLastCaseIsDefaultChecku""Add a default case to this switch.(ŽºÖ
+lsquid:S00100¬"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(À ­œþÿÿÿÿ
+psquid:S00116,"XRename this field "navi_feedback" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Òþ»ª
+Isquid:S1068'"2Remove this unused "DINNERFRAGMENT" private field.(®ðùæ
 V"squid:SwitchLastCaseIsDefaultCheck¯""Add a default case to this switch.(øãþ•ÿÿÿÿÿ
+?squid:S11858"(Remove this method to simply inherit it.(ßìê¯
+rsquid:S00116."URename this field "navi_about" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ÿá¸þøÿÿÿÿ

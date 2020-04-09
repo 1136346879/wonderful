@@ -71,3 +71,17 @@ z
 Japp/src/main/java/com/jeremyfeinstein/slidingmenu/lib/CustomViewAbove.java,f\e\fef192348cf8a93f820274d59febf91359a82a9d
 i
 9app/src/main/java/com/xgr/wonderful/utils/CacheUtils.java,c\d\cd2365d15f765fcb3c6c8eb3d3e5b664dfd4eb1c
+e
+5app/src/main/java/com/xgr/wonderful/utils/ACache.java,d\b\dbcebf15a065c1deaa5c3d3472df7ae21f8a3fd1
+l
+<app/src/main/java/com/xgr/wonderful/ui/SettingsActivity.java,2\4\24c1a6f4533e73641ed970457b14d1a32ffc7a9d
+g
+7app/src/main/java/com/xgr/wonderful/ui/FavFragment.java,d\5\d54b0125d98cb392464c46ed42ef038eef556399
+m
+=app/src/main/java/com/xgr/wonderful/ui/base/BaseFragment.java,1\8\183d2a327a196b5cbce9613ebda9031bcf6b656c
+t
+Dapp/src/main/java/com/xgr/wonderful/adapter/QiangContentAdapter.java,2\e\2eeec8efaaab513fa8e855c4f43a24a519067eb4
+
+Oapp/src/main/java/com/handmark/pulltorefresh/library/PullToRefreshListView.java,b\1\b1ced3afec79c504cc518306b71cf0655acf04e3
+h
+8app/src/main/java/com/xgr/wonderful/ui/Mainfragment.java,4\a\4a9fc9fe3e118645fa62fa2cbc9ed4a889c632d0

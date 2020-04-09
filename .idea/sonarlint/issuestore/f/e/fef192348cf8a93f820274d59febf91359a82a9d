@@ -1,25 +1,25 @@
 
-\squid:CallToDeprecatedMethodê"3Remove this use of "ACTION_MASK"; it is deprecated.(ÜÆ¢¸
-Q"squid:SwitchLastCaseIsDefaultCheckÃ""Add a default case to this switch.(äë
-V"squid:SwitchLastCaseIsDefaultCheck¬""Add a default case to this switch.(¼œóÛüÿÿÿÿ
-V"squid:SwitchLastCaseIsDefaultCheck²""Add a default case to this switch.(ß¶úåÿÿÿÿÿ
-Wsquid:S1161ª":Add the "@Override" annotation above this method signature(ÿİç›üÿÿÿÿ
 V"squid:SwitchLastCaseIsDefaultCheck¦""Add a default case to this switch.(“¶“âûÿÿÿÿ
-Jsquid:S1199÷"-Extract this nested code block into a method.(õÑÆÁşÿÿÿÿ
-bsquid:CommentedOutCodeLinee"<This block of commented-out lines of code should be removed.(â¾½³
-asquid:CallToDeprecatedMethod‹"9Remove this use of "ACTION_POINTER_UP"; it is deprecated.(‘‚Ó"
-hsquid:CommentedOutCodeLineı"<This block of commented-out lines of code should be removed.(ğóÌÁşÿÿÿÿ
-ksquid:CallToDeprecatedMethodÛ"=Remove this use of "VelocityTrackerCompat"; it is deprecated.(©ššüøÿÿÿÿ
-\squid:CallToDeprecatedMethod­"3Remove this use of "ACTION_MASK"; it is deprecated.(³¹ôé
-Q"squid:SwitchLastCaseIsDefaultCheck­""Add a default case to this switch.(³¹ôé
-csquid:CommentedOutCodeLineß"<This block of commented-out lines of code should be removed.(Ú™Ÿˆ
+V"squid:SwitchLastCaseIsDefaultCheck²""Add a default case to this switch.(ß¶úåÿÿÿÿÿ
 Csquid:S1905¯"&Remove this unnecessary cast to "int".(è©­¡ûÿÿÿÿ
+asquid:CallToDeprecatedMethod‹"9Remove this use of "ACTION_POINTER_UP"; it is deprecated.(‘‚Ó"
+csquid:CommentedOutCodeLineß"<This block of commented-out lines of code should be removed.(Ú™Ÿˆ
 asquid:CallToDeprecatedMethodı"9Remove this use of "ACTION_POINTER_UP"; it is deprecated.(‘‚Ó"
 bsquid:CommentedOutCodeLineX"<This block of commented-out lines of code should be removed.(”ÃŒÖ
-Jsquid:S1135˜"2Complete the task associated to this TODO comment.(Òÿ
-isquid:CallToDeprecatedMethod÷";Remove this use of "ACTION_POINTER_DOWN"; it is deprecated.(õÑÆÁşÿÿÿÿ
-csquid:CommentedOutCodeLine£"<This block of commented-out lines of code should be removed.(–ÛüÄ
-gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(öÔØ©øÿÿÿÿ
+\squid:CallToDeprecatedMethod­"3Remove this use of "ACTION_MASK"; it is deprecated.(³¹ôé
+bsquid:CommentedOutCodeLinee"<This block of commented-out lines of code should be removed.(â¾½³
+V"squid:SwitchLastCaseIsDefaultCheck¬""Add a default case to this switch.(¼œóÛüÿÿÿÿ
+Q"squid:SwitchLastCaseIsDefaultCheck­""Add a default case to this switch.(³¹ôé
+\squid:CallToDeprecatedMethodê"3Remove this use of "ACTION_MASK"; it is deprecated.(ÜÆ¢¸
 psquid:S2293c"YReplace the type specification in this constructor call with the diamond operator ("<>").(†ï›É
-bsquid:CommentedOutCodeLine^"<This block of commented-out lines of code should be removed.(ë®Ü¼
+Jsquid:S1199÷"-Extract this nested code block into a method.(õÑÆÁşÿÿÿÿ
+Q"squid:SwitchLastCaseIsDefaultCheckÃ""Add a default case to this switch.(äë
+Jsquid:S1135˜"2Complete the task associated to this TODO comment.(Òÿ
+csquid:CommentedOutCodeLine£"<This block of commented-out lines of code should be removed.(–ÛüÄ
 V"squid:SwitchLastCaseIsDefaultCheckö""Add a default case to this switch.(ë´åİşÿÿÿÿ
+Wsquid:S1161ª":Add the "@Override" annotation above this method signature(ÿİç›üÿÿÿÿ
+ksquid:CallToDeprecatedMethodÛ"=Remove this use of "VelocityTrackerCompat"; it is deprecated.(©ššüøÿÿÿÿ
+gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(öÔØ©øÿÿÿÿ
+bsquid:CommentedOutCodeLine^"<This block of commented-out lines of code should be removed.(ë®Ü¼
+hsquid:CommentedOutCodeLineı"<This block of commented-out lines of code should be removed.(ğóÌÁşÿÿÿÿ
+isquid:CallToDeprecatedMethod÷";Remove this use of "ACTION_POINTER_DOWN"; it is deprecated.(õÑÆÁşÿÿÿÿ

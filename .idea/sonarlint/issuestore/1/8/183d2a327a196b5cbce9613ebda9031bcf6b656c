@@ -1,0 +1,9 @@
+
+dsquid:S3008"NRename this field "TAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(é—é
+?squid:S1444")Make this "public static TAG" field final(é—é
+Msquid:S2696"6Make the enclosing method "static" or remove this set.(ðÕ¡þ
+|"squid:ClassVariableVisibilityCheck"OMake TAG a static final constant or non-public and provide accessors if needed.(é—é
+Nsquid:S1135"2Complete the task associated to this TODO comment.(öË…æùÿÿÿÿ
+Nsquid:S1135"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135&"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135-"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ

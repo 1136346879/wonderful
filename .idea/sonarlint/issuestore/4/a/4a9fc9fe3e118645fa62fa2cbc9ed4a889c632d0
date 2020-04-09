@@ -1,0 +1,18 @@
+
+?squid:S1185&"(Remove this method to simply inherit it.(ßìê¯
+?squid:S1185@"(Remove this method to simply inherit it.(ßû¢½
+Nsquid:S1135'"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135A"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135M"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+gsquid:CallToDeprecatedMethod3"?Remove this use of "setOnPageChangeListener"; it is deprecated.(íþÄÄ
+?squid:S1185F"(Remove this method to simply inherit it.(öÿÕÅ
+psquid:S1450"ZRemove the "contentView" field and declare it as a local variable in the relevant methods.(íé÷b
+Nsquid:S1135Y"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+nsquid:S1450"WRemove the "mAdapter" field and declare it as a local variable in the relevant methods.(žœÍÇ
+Nsquid:S1135"2Complete the task associated to this TODO comment.(öË…æùÿÿÿÿ
+>squid:S11859"(Remove this method to simply inherit it.(¶±„
+Nsquid:S1135S"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135."2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135:"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+Nsquid:S1135G"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+|squid:S1488!"`Immediately return this expression instead of assigning it to the temporary variable "fragment".(Ô µÔÿÿÿÿÿ

@@ -1,12 +1,12 @@
 
-‹"squid:ClassVariableVisibilityCheck"QMake APPID a static final constant or non-public and provide accessors if needed.(å°¿ûüÿÿÿÿ8»¦ÆÁ-
-dsquid:S3008"NRename this field "TAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(é—é
+Usquid:S1135>"2Complete the task associated to this TODO comment.(‹÷ÎÑøÿÿÿÿ8Õ¥ÎÅÁ-
+|"squid:ClassVariableVisibilityCheck"OMake TAG a static final constant or non-public and provide accessors if needed.(é—é
 Rsquid:S26965"6Make the enclosing method "static" or remove this set.(‹ŸÃÀùÿÿÿÿ
+Msquid:S26963"6Make the enclosing method "static" or remove this set.(ğÕ¡ş
+dsquid:S3008"NRename this field "TAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(é—é
+Nsquid:S1444"+Make this "public static APPID" field final(å°¿ûüÿÿÿÿ8»¦ÆÁ-
 ?squid:S1444")Make this "public static TAG" field final(é—é
+ssquid:S3008"PRename this field "APPID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(å°¿ûüÿÿÿÿ8»¦ÆÁ-
+‹"squid:ClassVariableVisibilityCheck"QMake APPID a static final constant or non-public and provide accessors if needed.(å°¿ûüÿÿÿÿ8»¦ÆÁ-
 Usquid:S11358"2Complete the task associated to this TODO comment.(ë±›ƒúÿÿÿÿ8Õ¥ÎÅÁ-
 Nsquid:S11351"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-Nsquid:S1444"+Make this "public static APPID" field final(å°¿ûüÿÿÿÿ8»¦ÆÁ-
-ssquid:S3008"PRename this field "APPID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(å°¿ûüÿÿÿÿ8»¦ÆÁ-
-Msquid:S26963"6Make the enclosing method "static" or remove this set.(ğÕ¡ş
-|"squid:ClassVariableVisibilityCheck"OMake TAG a static final constant or non-public and provide accessors if needed.(é—é
-Usquid:S1135>"2Complete the task associated to this TODO comment.(‹÷ÎÑøÿÿÿÿ8Õ¥ÎÅÁ-
